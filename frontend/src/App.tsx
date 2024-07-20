@@ -6,6 +6,8 @@ import RepairRecordsComponent from "./components/RepairRecords";
 import CustomersComponent from "./components/Customers";
 import ShipmentsComponent from "./components/Shipments";
 import TripsComponent from "./components/Trips";
+import NavBar from "./components/NavBar";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const App: React.FC = () => {
   const [trucks, setTrucks] = useState<any[]>([]);
@@ -46,13 +48,22 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="App">
-      <TrucksComponent trucks={trucks} />
-      <EmployeesComponent employees={employees} />
-      <RepairRecordsComponent repairRecords={repairRecords} />
-      <CustomersComponent customers={customers} />
-      <ShipmentsComponent shipments={shipments} />
-      <TripsComponent trips={trips} />
+    <div className="flex flex-col h-screen">
+      <BrowserRouter>
+        <header>
+          <NavBar />
+        </header>
+        <main className="flex-grow sm:mt-[120px] lg:mt-[100px]">
+          <Routes>
+            <Route path="/" element={<TrucksComponent trucks={trucks} />} />
+            <Route path="/employees" element={<EmployeesComponent employees={employees} />} />
+            <Route path="/repair_records" element={<RepairRecordsComponent repairRecords={repairRecords} />} />
+            <Route path="/customers" element={<CustomersComponent customers={customers} />} />
+            <Route path="/shipments" element={<ShipmentsComponent shipments={shipments} />} />
+            <Route path="/trips" element={<TripsComponent trips={trips} />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
     </div>
   );
 };

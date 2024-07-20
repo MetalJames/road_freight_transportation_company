@@ -88,6 +88,25 @@ app.put('/api/trucks/:id', async (req, res) => {
     }
 });
 
+// Route for deleting a truck
+app.delete('/api/trucks/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        console.log(`Received request to delete truck with id: ${id}`);
+        const collection = db.collection('trucks');
+        const result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+        if (result.deletedCount > 0) {
+            res.status(200).send("Truck deleted successfully");
+        } else {
+            res.status(404).send("Truck not found");
+        }
+    } catch (err) {
+        console.error("Error deleting truck:", err);
+        res.status(500).send(err.message);
+    }
+});
+
 // Route for fetching employees
 app.get('/api/employees', async (req, res) => {
     try {

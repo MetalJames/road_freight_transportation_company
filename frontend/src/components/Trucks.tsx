@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ConfirmationModal from "./ConfirmationModal";
+import SuccessModal from "./SuccessModal";
+import TruckEditCreateModal from "./TruckEditCreateModal";
 
 interface Truck {
     _id?: string; // _id is optional for new trucks
@@ -21,6 +24,10 @@ const TrucksComponent: React.FC = () => {
         numberOfRepairs: 0
     });
     const [isCreating, setIsCreating] = useState<boolean>(false);
+
+    const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [truckToDelete, setTruckToDelete] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchTrucks = async () => {
@@ -109,79 +116,93 @@ const TrucksComponent: React.FC = () => {
                 console.error("Error updating truck:", error);
             }
         }
-    };
+    };    
 
     const handleCancel = () => {
         setEditTruck(null);
         setIsCreating(false); // Exit create mode
     };
 
+    const handleDeleteClick = (id: string | undefined) => {
+        if (!id) return;
+        setTruckToDelete(id);
+        setIsConfirmDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (truckToDelete) {
+            try {
+                const response = await axios.delete(`http://localhost:5000/api/trucks/${truckToDelete}`);
+                if (response.status === 200) {
+                    setTrucks((prevTrucks) => prevTrucks.filter((truck) => truck._id !== truckToDelete));
+                    setIsSuccessModalOpen(true);
+                }
+            } catch (error) {
+                console.error("Error deleting truck:", error);
+            }
+        }
+        setIsConfirmDeleteModalOpen(false);
+        setTruckToDelete(null);
+    };
+
+    const cancelDelete = () => {
+        setIsConfirmDeleteModalOpen(false);
+        setTruckToDelete(null);
+    };
+
+
     return (
-        <div>
-            <h2>Trucks</h2>
-            <button onClick={handleCreateClick}>Create New Truck</button>
-            <ul>
+        <div className="p-6 bg-gray-100">
+            <h2 className="text-2xl font-bold mb-4">Trucks</h2>
+            <button 
+                onClick={handleCreateClick} 
+                className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
+            >
+                Create New Truck
+            </button>
+            <ul className="space-y-4">
                 {trucks.map((truck) => (
-                    <li key={truck._id}>
-                        {truck.brand} - {truck.load}kg - {truck.capacity}kg - {truck.year} -
-                        Repairs: {truck.numberOfRepairs}
-                        <button onClick={() => handleEditClick(truck)}>Edit</button>
-                    </li>
+                <li 
+                    key={truck._id} 
+                    className="p-4 bg-white shadow rounded flex justify-between items-center"
+                >
+                    <div>
+                        <span className="block text-lg font-semibold">{truck.brand}</span>
+                        <span className="block text-sm text-gray-500">{truck.load}kg - {truck.capacity}kg - {truck.year}</span>
+                        <span className="block text-sm text-gray-500">Repairs: {truck.numberOfRepairs}</span>
+                    </div>
+                    <div>
+                        <button 
+                            onClick={() => handleEditClick(truck)} 
+                            className="ml-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300"
+                        >
+                            Edit
+                        </button>
+                        <button
+                        onClick={() => handleDeleteClick(truck._id)}
+                        className="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </li>
                 ))}
             </ul>
 
-            {/* Form to create a new truck or edit an existing one */}
             {(isCreating || editTruck) && (
-                <form onSubmit={handleSubmit}>
-                    <h3>{isCreating ? "Create New Truck" : "Edit Truck"}</h3>
-                    <label>
-                        Brand:
-                        <input
-                            type="text"
-                            name="brand"
-                            value={isCreating ? newTruck.brand : editTruck?.brand || ''}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
-                        Load:
-                        <input
-                            type="number"
-                            name="load"
-                            value={isCreating ? newTruck.load : editTruck?.load || 0}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
-                        Capacity:
-                        <input
-                            type="number"
-                            name="capacity"
-                            value={isCreating ? newTruck.capacity : editTruck?.capacity || 0}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
-                        Year:
-                        <input
-                            type="number"
-                            name="year"
-                            value={isCreating ? newTruck.year : editTruck?.year || 0}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <label>
-                        Number of Repairs:
-                        <input
-                            type="number"
-                            name="numberOfRepairs"
-                            value={isCreating ? newTruck.numberOfRepairs : editTruck?.numberOfRepairs || 0}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <button type="submit">{isCreating ? "Create" : "Save"}</button>
-                    <button type="button" onClick={handleCancel}>Cancel</button>
-                </form>
+                <TruckEditCreateModal
+                    truck={isCreating ? newTruck : editTruck}
+                    isCreating={isCreating}
+                    onChange={handleInputChange}
+                    onSubmit={handleSubmit}
+                    onCancel={handleCancel}
+                />
+            )}
+            {isConfirmDeleteModalOpen && (
+                <ConfirmationModal onConfirm={confirmDelete} onCancel={cancelDelete} />
+            )}
+            {isSuccessModalOpen && (
+                <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
             )}
         </div>
     );
