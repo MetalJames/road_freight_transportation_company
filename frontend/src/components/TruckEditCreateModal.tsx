@@ -31,46 +31,51 @@ const TruckEditCreateModal: React.FC<TruckFormModalProps> = ({ truck, isCreating
                         name="brand"
                         value={truck?.brand || ''}
                         onChange={onChange}
+                        placeholder="Enter brand"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
                     <span className="text-gray-700">Load:</span>
                     <input
-                        type="number"
+                        type="text"
                         name="load"
-                        value={truck?.load || 0}
+                        value={truck?.load || ''}
                         onChange={onChange}
+                        placeholder="Enter load (kg)"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
                     <span className="text-gray-700">Capacity:</span>
                     <input
-                        type="number"
+                        type="text"
                         name="capacity"
-                        value={truck?.capacity || 0}
+                        value={truck?.capacity || ''}
                         onChange={onChange}
+                        placeholder="Enter capacity (kg)"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
                     <span className="text-gray-700">Year:</span>
                     <input
-                        type="number"
+                        type="text"
                         name="year"
-                        value={truck?.year || 0}
+                        value={truck?.year || ''}
                         onChange={onChange}
+                        placeholder="Enter year"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
                     <span className="text-gray-700">Number of Repairs:</span>
                     <input
-                        type="number"
+                        type="text"
                         name="numberOfRepairs"
-                        value={truck?.numberOfRepairs || 0}
+                        value={truck?.numberOfRepairs || ''}
                         onChange={onChange}
+                        placeholder="Enter number of repairs"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>

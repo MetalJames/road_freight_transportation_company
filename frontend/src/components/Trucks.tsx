@@ -27,6 +27,7 @@ const TrucksComponent: React.FC = () => {
 
     const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
     const [truckToDelete, setTruckToDelete] = useState<string | null>(null);
 
     useEffect(() => {
@@ -92,6 +93,10 @@ const TrucksComponent: React.FC = () => {
 
                 // Exit create mode
                 setIsCreating(false);
+
+                // Set success message and open success modal
+                setSuccessMessage("Truck created successfully.");
+                setIsSuccessModalOpen(true);
             } catch (error) {
                 console.error("Error creating truck:", error);
             }
@@ -112,6 +117,10 @@ const TrucksComponent: React.FC = () => {
 
                 // Clear the editTruck state to close the edit form
                 setEditTruck(null);
+
+                // Set success message and open success modal
+                setSuccessMessage("Truck updated successfully.");
+                setIsSuccessModalOpen(true);
             } catch (error) {
                 console.error("Error updating truck:", error);
             }
@@ -135,6 +144,9 @@ const TrucksComponent: React.FC = () => {
                 const response = await axios.delete(`http://localhost:5000/api/trucks/${truckToDelete}`);
                 if (response.status === 200) {
                     setTrucks((prevTrucks) => prevTrucks.filter((truck) => truck._id !== truckToDelete));
+                    
+                    // Set success message and open success modal
+                    setSuccessMessage("The truck successfully deleted.");
                     setIsSuccessModalOpen(true);
                 }
             } catch (error) {
@@ -202,7 +214,7 @@ const TrucksComponent: React.FC = () => {
                 <ConfirmationModal onConfirm={confirmDelete} onCancel={cancelDelete} />
             )}
             {isSuccessModalOpen && (
-                <SuccessModal onClose={() => setIsSuccessModalOpen(false)} />
+                <SuccessModal message={successMessage} onClose={() => setIsSuccessModalOpen(false)} />
             )}
         </div>
     );

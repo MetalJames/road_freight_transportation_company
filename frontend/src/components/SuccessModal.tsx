@@ -1,8 +1,8 @@
-const SuccessModal = ({ onClose }: { onClose: () => void }) => (
+const SuccessModal = ({  message, onClose }: { message: string, onClose: () => void }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <div className="bg-white p-6 rounded shadow-lg">
             <h3 className="text-xl font-semibold">Success</h3>
-            <p>The truck was successfully deleted.</p>
+            <p>{message}</p>
             <div className="mt-4 flex justify-end">
                 <button 
                     onClick={onClose}
