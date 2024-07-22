@@ -3,17 +3,13 @@ import axios from "axios";
 import ConfirmationModal from "./ConfirmationModal";
 import SuccessModal from "./SuccessModal";
 import TruckEditCreateModal from "./TruckEditCreateModal";
+import { Truck } from '../types/types';
 
-interface Truck {
-    _id?: string; // _id is optional for new trucks
-    brand: string;
-    load: number;
-    capacity: number;
-    year: number;
-    numberOfRepairs: number;
+type TrucksComponentProps = {
+    trucks: Truck[];
 }
 
-const TrucksComponent: React.FC = () => {
+const TrucksComponent: React.FC<TrucksComponentProps> = () => {
     const [trucks, setTrucks] = useState<Truck[]>([]);
     const [editTruck, setEditTruck] = useState<Truck | null>(null);
     const [newTruck, setNewTruck] = useState<Truck>({

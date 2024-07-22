@@ -1,13 +1,7 @@
 import React from "react";
+import { Employee } from "../types/types";
 
-interface Employee {
-  _id: string;
-  name: string;
-  surname: string;
-  seniority: string;
-}
-
-interface EmployeesComponentProps {
+type EmployeesComponentProps = {
   employees: Employee[];
 }
 

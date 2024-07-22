@@ -1,13 +1,8 @@
 import React from "react";
+import { Shipments } from "../types/types";
 
-interface Shipment {
-  _id: string;
-  weight: number;
-  value: number;
-}
-
-interface ShipmentsComponentProps {
-  shipments: Shipment[];
+type ShipmentsComponentProps = {
+  shipments: Shipments[];
 }
 
 const ShipmentsComponent: React.FC<ShipmentsComponentProps> = ({

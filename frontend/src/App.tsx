@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import TrucksComponent from "./components/Trucks";
-import EmployeesComponent from "./components/Employees";
-import RepairRecordsComponent from "./components/RepairRecords";
-import CustomersComponent from "./components/Customers";
-import ShipmentsComponent from "./components/Shipments";
-import TripsComponent from "./components/Trips";
+import TrucksComponent from "./components/TrucksComponent";
+import EmployeesComponent from "./components/EmployeesComponent";
+import RepairRecordsComponent from "./components/RepairRecordsComponent";
+import CustomersComponent from "./components/CustomersComponent";
+import ShipmentsComponent from "./components/ShipmentsComponent";
+import TripsComponent from "./components/TripsComponent";
 import NavBar from "./components/NavBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Truck, Customer, Employee, RepairRecord, Shipments, Trips } from "./types/types";
 
 const App: React.FC = () => {
-  const [trucks, setTrucks] = useState<any[]>([]);
-  const [employees, setEmployees] = useState<any[]>([]);
-  const [repairRecords, setRepairRecords] = useState<any[]>([]);
-  const [customers, setCustomers] = useState<any[]>([]);
-  const [shipments, setShipments] = useState<any[]>([]);
-  const [trips, setTrips] = useState<any[]>([]);
+  const [trucks, setTrucks] = useState<Truck[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [repairRecords, setRepairRecords] = useState<RepairRecord[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [shipments, setShipments] = useState<Shipments[]>([]);
+  const [trips, setTrips] = useState<Trips[]>([]);
 
-  const axiosInstance = axios.create({
+  const axiosInstance = useMemo(() => axios.create({
     baseURL: "http://localhost:5000/api", // Adjust as per your backend server setup
-  });
+  }), []);
 
   console.log(trucks);
 
@@ -45,7 +46,7 @@ const App: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [axiosInstance]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -53,7 +54,7 @@ const App: React.FC = () => {
         <header>
           <NavBar />
         </header>
-        <main className="flex-grow sm:mt-[120px] lg:mt-[100px]">
+        <main className="flex-grow">
           <Routes>
             <Route path="/" element={<TrucksComponent trucks={trucks} />} />
             <Route path="/employees" element={<EmployeesComponent employees={employees} />} />

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.svg'
 
 const NavBar = () => {
 
@@ -36,7 +37,13 @@ const NavBar = () => {
     ]
 
     return (
-        <nav className='w-full flex mt-6 py-4 justify-between items-center navbar z-40 bg-white'>
+        <nav className='w-full flex py-4 justify-between items-center navbar z-40 bg-white'>
+            <div className='flex items-center'>
+                <Link to={"/"} className="cursor-pointer">
+                    <img className="h-15 w-16 inline-flex image-center" src={logo} alt="Truck Company Logo"/>
+                </Link>
+                <h1 className='text-3xl italic font-medium'>RoadLink Freight Services</h1>
+            </div>
             <ul className='list-none sm:flex hidden justify-end items-center flex-1'>
                 {navLinks.map(({ id, title, link }) => (
                     <Link key={id} to={link}>

@@ -1,14 +1,7 @@
 import React from "react";
+import { Customer } from "../types/types";
 
-interface Customer {
-  _id: string;
-  name: string;
-  address: string;
-  phone1: string;
-  phone2: string;
-}
-
-interface CustomersComponentProps {
+type CustomersComponentProps = {
   customers: Customer[];
 }
 
@@ -21,8 +14,10 @@ const CustomersComponent: React.FC<CustomersComponentProps> = ({
       <ul>
         {customers.map((customer) => (
           <li key={customer._id}>
-            {customer.name} - {customer.address} - Phone1: {customer.phone1} -
-            Phone2: {customer.phone2}
+            {customer.name} - {customer.address} - 
+            {customer.phoneNumbers.map((index, phone) => (
+              <p>Phone{index}: {phone}</p>
+            ))}
           </li>
         ))}
       </ul>

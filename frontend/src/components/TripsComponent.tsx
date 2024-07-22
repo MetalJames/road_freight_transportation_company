@@ -1,15 +1,8 @@
 import React from "react";
+import { Trips } from "../types/types";
 
-interface Trip {
-  _id: string;
-  route_from: string;
-  route_to: string;
-  drivers: string[];
-  shipments: string[];
-}
-
-interface TripsComponentProps {
-  trips: Trip[];
+type TripsComponentProps = {
+  trips: Trips[];
 }
 
 const TripsComponent: React.FC<TripsComponentProps> = ({ trips }) => {

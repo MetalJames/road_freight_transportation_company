@@ -1,13 +1,7 @@
 import React from "react";
+import { RepairRecord } from "../types/types";
 
-interface RepairRecord {
-  _id: string;
-  truck_id: string;
-  mechanic_id: string;
-  estimated_repair_time: number;
-}
-
-interface RepairRecordsComponentProps {
+type RepairRecordsComponentProps = {
   repairRecords: RepairRecord[];
 }
 
@@ -20,8 +14,8 @@ const RepairRecordsComponent: React.FC<RepairRecordsComponentProps> = ({
       <ul>
         {repairRecords.map((record) => (
           <li key={record._id}>
-            Truck ID: {record.truck_id} - Mechanic ID: {record.mechanic_id} -
-            Estimated Time: {record.estimated_repair_time} days
+            Truck ID: {record.id} - Mechanic Name: {record.mechanic} -
+            Estimated Time: {record.estimatedRepairTime} days
           </li>
         ))}
       </ul>
