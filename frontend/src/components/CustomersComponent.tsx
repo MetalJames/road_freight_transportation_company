@@ -16,7 +16,7 @@ const CustomersComponent: React.FC<CustomersComponentProps> = ({
           <li key={customer._id}>
             {customer.name} - {customer.address} - 
             {customer.phoneNumbers.map((index, phone) => (
-              <p>Phone{index}: {phone}</p>
+              <p key={index}>Phone{index}: {phone}</p>
             ))}
           </li>
         ))}

@@ -16,7 +16,7 @@ const NavBar = () => {
         },
         {
             id: "repair_records",
-            title: "Repair_records",
+            title: "Repair Records",
             link: "/repair_records",
         },
         {
