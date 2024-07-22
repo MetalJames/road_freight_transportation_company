@@ -42,7 +42,7 @@ describe('Delete Truck', () => {
             .expect(200);
 
         // Check the response
-        expect(response.text).toBe('Truck deleted successfully');
+        expect(response.body.message).toBe('Truck deleted successfully');
 
         // Check if the truck was actually deleted
         const truck = await db.collection('trucks').findOne({ _id: truckId });

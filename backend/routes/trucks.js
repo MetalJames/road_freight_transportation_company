@@ -15,9 +15,9 @@ router.get('/', async (req, res) => {
     try {
         const collection = req.db.collection('trucks');
         const trucks = await collection.find({}).toArray();
-        res.json(trucks);
+        res.status(200).json(trucks); // Ensure JSON response with a 200 status code
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).json({ message: err.message }); // Return error as JSON
     }
 });
 
@@ -27,9 +27,9 @@ router.post('/', async (req, res) => {
     try {
         const collection = req.db.collection('trucks');
         const result = await collection.insertOne(newTruck);
-        res.status(201).json({ ...newTruck, _id: result.insertedId });
+        res.status(201).json({ ...newTruck, _id: result.insertedId }); // Return created truck with 201 status code
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).json({ message: err.message }); // Return error as JSON
     }
 });
 
@@ -45,12 +45,12 @@ router.put('/:id', async (req, res) => {
             { $set: updatedTruck }
         );
         if (result.modifiedCount > 0) {
-            res.status(200).send("Truck updated successfully");
+            res.status(200).json({ message: 'Truck updated successfully' });
         } else {
-            res.status(404).send("Truck not found");
+            res.status(404).json({ message: 'Truck not found' });
         }
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).json({ message: err.message });
     }
 });
 
@@ -61,12 +61,12 @@ router.delete('/:id', async (req, res) => {
         const collection = req.db.collection('trucks');
         const result = await collection.deleteOne({ _id: new ObjectId(id) });
         if (result.deletedCount > 0) {
-            res.status(200).send("Truck deleted successfully");
+            res.status(200).json({ message: 'Truck deleted successfully' });
         } else {
-            res.status(404).send("Truck not found");
+            res.status(404).json({ message: 'Truck not found' });
         }
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).json({ message: err.message });
     }
 });
 
