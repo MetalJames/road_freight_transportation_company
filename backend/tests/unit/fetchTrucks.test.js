@@ -1,34 +1,35 @@
-const request = require('supertest');
-const { MongoClient } = require('mongodb');
-const express = require('express');
-const trucksRoutes = require('../../routes/trucks'); // Adjust path as needed
+const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const express = require('express');
+const request = require('supertest');
+const trucksRoutes = require('../../routes/trucks');
 
 let app;
 let mongoServer;
-let db;
 
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
-    const client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-    db = client.db('test');
-    
+
+    await mongoose.connect(mongoUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+
     app = express();
     app.use(express.json());
     app.use('/api/trucks', trucksRoutes);
-    app.set('db', db);
 });
 
 afterAll(async () => {
+    await mongoose.disconnect();
     await mongoServer.stop();
 });
 
 describe('Trucks API', () => {
     it('should fetch all trucks', async () => {
-        const collection = db.collection('trucks');
-        await collection.insertMany([{ name: 'Truck 1' }, { name: 'Truck 2' }]);
+        const collection = mongoose.connection.collection('trucks');
+        await collection.insertMany([{ brand: 'Truck 1', load: 10, capacity: 20, year: 2020, numberOfRepairs: 1 }, { brand: 'Truck 2', load: 15, capacity: 25, year: 2021, numberOfRepairs: 2 }]);
 
         const response = await request(app).get('/api/trucks');
         expect(response.statusCode).toBe(200);

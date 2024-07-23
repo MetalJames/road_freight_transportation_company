@@ -1,27 +1,29 @@
 const request = require('supertest');
-const { MongoClient, ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 const express = require('express');
-const trucksRoutes = require('../../routes/trucks'); // Adjust path as needed
+const trucksRoutes = require('../../routes/trucks');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const Truck = require('../../models/Truck');
 
 let app;
 let mongoServer;
-let db;
 
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
-    const client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-    db = client.db('test');
-    
+
+    await mongoose.connect(mongoUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+
     app = express();
     app.use(express.json());
     app.use('/api/trucks', trucksRoutes);
-    app.set('db', db);
 });
 
 afterAll(async () => {
+    await mongoose.disconnect();
     await mongoServer.stop();
 });
 
@@ -30,8 +32,14 @@ describe('Delete Truck', () => {
 
     // Create a truck before running the delete test
     beforeEach(async () => {
-        const result = await db.collection('trucks').insertOne({ name: 'Truck to be deleted', model: '2024' });
-        truckId = result.insertedId;
+        const result = await Truck.create({
+            brand: 'Truck to be deleted',
+            load: 10,
+            capacity: 20,
+            year: 2024,
+            numberOfRepairs: 0
+        });
+        truckId = result._id;
     });
 
     it('should delete a truck', async () => {
@@ -45,7 +53,7 @@ describe('Delete Truck', () => {
         expect(response.body.message).toBe('Truck deleted successfully');
 
         // Check if the truck was actually deleted
-        const truck = await db.collection('trucks').findOne({ _id: truckId });
+        const truck = await Truck.findById(truckId);
         expect(truck).toBeNull();
     });
 });
