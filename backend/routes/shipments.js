@@ -1,23 +1,14 @@
 const express = require('express');
-const { ObjectId } = require('mongodb');
+const Shipment = require('../models/Shipment');
 const router = express.Router();
-
-// Middleware to inject the database connection
-const dbMiddleware = (req, res, next) => {
-    req.db = req.app.get('db');
-    next();
-};
-
-router.use(dbMiddleware);
 
 // Route for fetching shipments
 router.get('/', async (req, res) => {
     try {
-        const collection = req.db.collection('shipments'); // Replace with your collection name
-        const shipments = await collection.find({}).toArray();
-        res.json(shipments);
+        const shipments = await Shipment.find({});
+        res.status(200).json(shipments);
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).json({ message: err.message });
     }
 });
 

@@ -1,11 +1,11 @@
 import React from "react";
-import { Employee } from "../types/types";
+import { EmployeeType } from "../types/types";
 
 type EmployeesComponentProps = {
-  employees: Employee[];
+  employees: EmployeeType[];
 }
 
-const EmployeesComponent: React.FC<EmployeesComponentProps> = ({
+const Employees: React.FC<EmployeesComponentProps> = ({
   employees,
 }) => {
   return (
@@ -22,4 +22,4 @@ const EmployeesComponent: React.FC<EmployeesComponentProps> = ({
   );
 };
 
-export default EmployeesComponent;
+export default Employees;

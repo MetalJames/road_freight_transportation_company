@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721675711075" clover="3.2.0">
-  <project timestamp="1721675711075" name="All files">
+<coverage generated="1721675832548" clover="3.2.0">
+  <project timestamp="1721675832548" name="All files">
     <metrics statements="55" coveredstatements="48" conditionals="4" coveredconditionals="2" methods="7" coveredmethods="7" elements="66" coveredelements="57" complexity="0" loc="55" ncloc="55" packages="1" files="2" classes="2"/>
     <file name="employees.js" path="/Users/vovaruzhak/Desktop/Database_Final_Project/backend/routes/employees.js">
       <metrics statements="14" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>

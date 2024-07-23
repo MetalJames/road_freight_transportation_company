@@ -1,11 +1,11 @@
 import React from "react";
-import { Shipments } from "../types/types";
+import { ShipmentsType } from "../types/types";
 
 type ShipmentsComponentProps = {
-  shipments: Shipments[];
+  shipments: ShipmentsType[];
 }
 
-const ShipmentsComponent: React.FC<ShipmentsComponentProps> = ({
+const Shipments: React.FC<ShipmentsComponentProps> = ({
   shipments,
 }) => {
   return (
@@ -22,4 +22,4 @@ const ShipmentsComponent: React.FC<ShipmentsComponentProps> = ({
   );
 };
 
-export default ShipmentsComponent;
+export default Shipments;

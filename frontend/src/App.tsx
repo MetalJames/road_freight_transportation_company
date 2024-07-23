@@ -1,29 +1,22 @@
 import React, { useState, useEffect, useMemo } from "react";
-import axios from "axios";
-import TrucksComponent from "./components/TrucksComponent";
-import EmployeesComponent from "./components/EmployeesComponent";
-import RepairRecordsComponent from "./components/RepairRecordsComponent";
-import CustomersComponent from "./components/CustomersComponent";
-import ShipmentsComponent from "./components/ShipmentsComponent";
-import TripsComponent from "./components/TripsComponent";
-import NavBar from "./components/NavBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Truck, Customer, Employee, RepairRecord, Shipments, Trips } from "./types/types";
+import axios from "axios";
+import { NavBar } from "./components";
+import { Customers, Employees, RepairRecords, Shipments, Trips, Trucks } from "./pages";
+import { TruckType, CustomerType, EmployeeType, RepairRecordType, ShipmentsType, TripsType } from "./types/types";
 
 const App: React.FC = () => {
-  const [trucks, setTrucks] = useState<Truck[]>([]);
-  const [employees, setEmployees] = useState<Employee[]>([]);
-  const [repairRecords, setRepairRecords] = useState<RepairRecord[]>([]);
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [shipments, setShipments] = useState<Shipments[]>([]);
-  const [trips, setTrips] = useState<Trips[]>([]);
+  const [trucks, setTrucks] = useState<TruckType[]>([]);
+  const [employees, setEmployees] = useState<EmployeeType[]>([]);
+  const [repairRecords, setRepairRecords] = useState<RepairRecordType[]>([]);
+  const [customers, setCustomers] = useState<CustomerType[]>([]);
+  const [shipments, setShipments] = useState<ShipmentsType[]>([]);
+  const [trips, setTrips] = useState<TripsType[]>([]);
 
   //using memo hook so I will not have an issue with refreshing - memorizing our data
   const axiosInstance = useMemo(() => axios.create({
     baseURL: "http://localhost:5000/api", // Adjust as per your backend server setup
   }), []);
-
-  console.log(trucks);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +34,7 @@ const App: React.FC = () => {
         setCustomers(customersResponse.data);
         setShipments(shipmentsResponse.data);
         setTrips(tripsResponse.data);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -57,12 +51,12 @@ const App: React.FC = () => {
         </header>
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<TrucksComponent trucks={trucks} />} />
-            <Route path="/employees" element={<EmployeesComponent employees={employees} />} />
-            <Route path="/repair_records" element={<RepairRecordsComponent repairRecords={repairRecords} />} />
-            <Route path="/customers" element={<CustomersComponent customers={customers} />} />
-            <Route path="/shipments" element={<ShipmentsComponent shipments={shipments} />} />
-            <Route path="/trips" element={<TripsComponent trips={trips} />} />
+            <Route path="/" element={<Trucks trucks={trucks} />} />
+            <Route path="/employees" element={<Employees employees={employees} />} />
+            <Route path="/repair_records" element={<RepairRecords repairRecords={repairRecords} />} />
+            <Route path="/customers" element={<Customers customers={customers} />} />
+            <Route path="/shipments" element={<Shipments shipments={shipments} />} />
+            <Route path="/trips" element={<Trips trips={trips} />} />
           </Routes>
         </main>
       </BrowserRouter>

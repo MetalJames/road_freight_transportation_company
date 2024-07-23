@@ -1,4 +1,4 @@
-export type Truck = {
+export type TruckType = {
     _id?: string; // _id is optional for new trucks
     brand: string;
     load: number;
@@ -7,7 +7,7 @@ export type Truck = {
     numberOfRepairs: number;
 }
 
-export type Customer = {
+export type CustomerType = {
     _id?: string; // Optional for new records
     id: number;
     name: string;
@@ -15,7 +15,7 @@ export type Customer = {
     phoneNumbers: string[]; // Array of phone numbers
 }
 
-export type Employee = {
+export type EmployeeType = {
     _id?: string; // Optional for new records
     id: number;
     name: string;
@@ -26,7 +26,7 @@ export type Employee = {
 }
 
 
-export type RepairRecord = {
+export type RepairRecordType = {
     _id?: string; // Optional for new records
     id: number;
     mechanic: string;
@@ -35,7 +35,7 @@ export type RepairRecord = {
 }
 
 
-export type Shipments = {
+export type ShipmentsType = {
     _id?: string; // _id is optional for new shipments
     id: number;
     weight: number;
@@ -44,7 +44,7 @@ export type Shipments = {
     destination: string;
 }
 
-export type Trips =  {
+export type TripsType =  {
     _id?: string; // Optional for new trips
     id: number;
     route_from: string;

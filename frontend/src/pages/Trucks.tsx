@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ConfirmationModal from "./ConfirmationModal";
-import SuccessModal from "./SuccessModal";
-import TruckEditCreateModal from "./TruckEditCreateModal";
-import { Truck } from '../types/types';
+import { TruckType } from '../types/types';
+import { ConfirmationModal, SuccessModal, TruckEditCreateModal } from "../components";
 
 type TrucksComponentProps = {
-    trucks: Truck[];
+    trucks: TruckType[];
 }
 
-const TrucksComponent: React.FC<TrucksComponentProps> = () => {
-    const [trucks, setTrucks] = useState<Truck[]>([]);
-    const [editTruck, setEditTruck] = useState<Truck | null>(null);
-    const [newTruck, setNewTruck] = useState<Truck>({
+const Trucks: React.FC<TrucksComponentProps> = () => {
+    const [trucks, setTrucks] = useState<TruckType[]>([]);
+    const [editTruck, setEditTruck] = useState<TruckType | null>(null);
+    const [newTruck, setNewTruck] = useState<TruckType>({
         brand: '',
         load: 0,
         capacity: 0,
@@ -58,7 +56,7 @@ const TrucksComponent: React.FC<TrucksComponentProps> = () => {
         }
     };
 
-    const handleEditClick = (truck: Truck) => {
+    const handleEditClick = (truck: TruckType) => {
         setEditTruck(truck);
         setIsCreating(false); // Ensure we're not in "create" mode
     };
@@ -216,4 +214,4 @@ const TrucksComponent: React.FC<TrucksComponentProps> = () => {
     );
 };
 
-export default TrucksComponent;
+export default Trucks;

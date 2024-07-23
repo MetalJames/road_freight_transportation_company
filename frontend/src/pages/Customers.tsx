@@ -1,11 +1,11 @@
 import React from "react";
-import { Customer } from "../types/types";
+import { CustomerType } from "../types/types";
 
 type CustomersComponentProps = {
-  customers: Customer[];
+  customers: CustomerType[];
 }
 
-const CustomersComponent: React.FC<CustomersComponentProps> = ({
+const Customers: React.FC<CustomersComponentProps> = ({
   customers,
 }) => {
   return (
@@ -25,4 +25,4 @@ const CustomersComponent: React.FC<CustomersComponentProps> = ({
   );
 };
 
-export default CustomersComponent;
+export default Customers;

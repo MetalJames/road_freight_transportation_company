@@ -1,16 +1,8 @@
 import React, { ChangeEvent, FormEvent } from 'react';
+import { TruckType } from '../types/types';
 
-interface Truck {
-    _id?: string;
-    brand: string;
-    load: number;
-    capacity: number;
-    year: number;
-    numberOfRepairs: number;
-}
-
-interface TruckFormModalProps {
-    truck: Truck | null;
+type TruckFormModalProps = {
+    truck: TruckType | null;
     isCreating: boolean;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onSubmit: (e: FormEvent) => void;

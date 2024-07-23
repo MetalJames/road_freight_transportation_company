@@ -1,11 +1,11 @@
 import React from "react";
-import { RepairRecord } from "../types/types";
+import { RepairRecordType } from "../types/types";
 
 type RepairRecordsComponentProps = {
-  repairRecords: RepairRecord[];
+  repairRecords: RepairRecordType[];
 }
 
-const RepairRecordsComponent: React.FC<RepairRecordsComponentProps> = ({
+const RepairRecords: React.FC<RepairRecordsComponentProps> = ({
   repairRecords,
 }) => {
   return (
@@ -23,4 +23,4 @@ const RepairRecordsComponent: React.FC<RepairRecordsComponentProps> = ({
   );
 };
 
-export default RepairRecordsComponent;
+export default RepairRecords;

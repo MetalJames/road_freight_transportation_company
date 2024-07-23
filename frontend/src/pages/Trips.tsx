@@ -1,11 +1,11 @@
 import React from "react";
-import { Trips } from "../types/types";
+import { TripsType } from "../types/types";
 
 type TripsComponentProps = {
-  trips: Trips[];
+  trips: TripsType[];
 }
 
-const TripsComponent: React.FC<TripsComponentProps> = ({ trips }) => {
+const Trips: React.FC<TripsComponentProps> = ({ trips }) => {
   return (
     <div>
       <h2>Trips</h2>
@@ -21,4 +21,4 @@ const TripsComponent: React.FC<TripsComponentProps> = ({ trips }) => {
   );
 };
 
-export default TripsComponent;
+export default Trips;
