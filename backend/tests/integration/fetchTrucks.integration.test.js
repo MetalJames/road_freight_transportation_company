@@ -19,16 +19,6 @@ beforeEach(async () => {
         });
     }
 
-    // Clear the truck collection
-    await Truck.deleteMany({});
-
-    // Insert sample data
-    await Truck.insertMany([
-        { brand: 'Ford', load: 1000, capacity: 5000, year: 2022, numberOfRepairs: 2 },
-        { brand: 'Volvo', load: 2000, capacity: 6000, year: 2021, numberOfRepairs: 5 },
-        { brand: 'Mercedes', load: 1500, capacity: 5500, year: 2023, numberOfRepairs: 1 }
-    ]);
-
     // Start the server on a different port for testing
     server = app.listen(5002); // Ensure a unique port for testing
 });
@@ -41,11 +31,23 @@ afterEach(async () => {
 
 describe('Truck API integration tests', () => {
     it('GET /api/trucks - should fetch all trucks', async () => {
+
+        // Insert test data into the in-memory database
+        await Truck.create([
+            { brand: 'Truck1', load: 1000, capacity: 5000, year: 2022, numberOfRepairs: 0 },
+            { brand: 'Truck2', load: 2000, capacity: 6000, year: 2023, numberOfRepairs: 1 }
+        ]);
+
+        // Fetch trucks from the API
         const response = await request(app).get('/api/trucks');
+
+        // Fetch the count of existing trucks from the database
+        const trucksCount = await Truck.countDocuments({});
 
         expect(response.statusCode).toBe(200);
         expect(response.body).toBeDefined();
         expect(Array.isArray(response.body)).toBeTruthy();
+        expect(response.body).toHaveLength(trucksCount); // Compare length dynamically
 
         // Check that the response contains trucks with expected properties
         response.body.forEach(truck => {
@@ -55,12 +57,6 @@ describe('Truck API integration tests', () => {
             expect(truck).toHaveProperty('year');
             expect(truck).toHaveProperty('numberOfRepairs');
         });
-
-        // expect(response.body).toHaveLength(3); // Ensure only 3 trucks are present
-        // expect(response.body[0]).toHaveProperty('brand');
-        // expect(response.body[0]).toHaveProperty('load');
-        // expect(response.body[0]).toHaveProperty('capacity');
-        // expect(response.body[0]).toHaveProperty('year');
-        // expect(response.body[0]).toHaveProperty('numberOfRepairs');
     });
 });
+

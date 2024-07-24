@@ -19,16 +19,6 @@ beforeEach(async () => {
         });
     }
 
-    // Clear the employee collection
-    await Employee.deleteMany({});
-
-    // Insert sample data
-    await Employee.insertMany([
-        { id: 11, name: "James", surname: "Black", seniority: 13, type: "mechanic", category: "A" },
-        { id: 12, name: "Lars", surname: "Ulrich", seniority: 5, type: "driver", category: "A" },
-        { id: 13, name: "Not", surname: "Sure", seniority: 3, type: "driver", category: "D" },
-    ]);
-
     // Start the server on a different port for testing
     server = app.listen(5001); // Ensure a unique port for testing
 });
@@ -41,16 +31,32 @@ afterEach(async () => {
 
 describe('Employee API integration tests', () => {
     it('GET /api/employees - should fetch all employees', async () => {
+
+        // Insert sample employee data
+        await Employee.insertMany([
+            { name: 'John', surname: 'Doe', seniority: 5, type: 'mechanic', category: 'A' },
+            { name: 'Jane', surname: 'Smith', seniority: 4, type: 'driver', category: 'B' },
+            { name: 'Emily', surname: 'Jones', seniority: 3, type: 'mechanic', category: 'B' },
+        ]);
+
+        // Fetch the employees from the API
         const response = await request(app).get('/api/employees');
 
-        expect(response.statusCode).toEqual(200);
+        // Fetch the expected count from the database
+        const employeeCount = await Employee.countDocuments({});
+
+        expect(response.statusCode).toBe(200);
         expect(response.body).toBeDefined();
         expect(Array.isArray(response.body)).toBeTruthy();
-        expect(response.body).toHaveLength(3); // Ensure only 3 employee are present
-        expect(response.body[0]).toHaveProperty('name');
-        expect(response.body[0]).toHaveProperty('surname');
-        expect(response.body[0]).toHaveProperty('seniority');
-        expect(response.body[0]).toHaveProperty('type');
-        expect(response.body[0]).toHaveProperty('category');
+        expect(response.body).toHaveLength(employeeCount); // Compare length dynamically
+
+        // Check that the response contains trucks with expected properties
+        response.body.forEach(employee => {
+            expect(employee).toHaveProperty('name');
+            expect(employee).toHaveProperty('surname');
+            expect(employee).toHaveProperty('seniority');
+            expect(employee).toHaveProperty('type');
+            expect(employee).toHaveProperty('category');
+        });
     });
 });
