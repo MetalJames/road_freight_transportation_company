@@ -21,7 +21,7 @@ const truckSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-});
+}, {versionKey: false});
 
 const Truck = mongoose.model('Truck', truckSchema);
 

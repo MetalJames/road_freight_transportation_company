@@ -31,7 +31,7 @@ const tripSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-});
+}, {versionKey: false});
 
 const Trip = mongoose.model('Trip', tripSchema);
 

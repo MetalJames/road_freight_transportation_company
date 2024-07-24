@@ -17,7 +17,7 @@ const customerSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-});
+}, {versionKey: false});
 
 const Customer = mongoose.model('Customer', customerSchema);
 

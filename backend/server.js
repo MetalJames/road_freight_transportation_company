@@ -36,6 +36,16 @@ app.use('/api/shipments', shipmentsRoutes);
 const tripsRoutes = require('./routes/trips');
 app.use('/api/trips', tripsRoutes);
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
+
+// have to use "if" for testing purposes - otherwise can not run integration tests
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+    });
+}
+
+// Export the app for testing
+module.exports = app;

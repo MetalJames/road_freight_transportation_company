@@ -43,7 +43,6 @@ describe('Create Truck API', () => {
                 .expect('Content-Type', /json/)
                 .expect(201);
 
-            console.log('Response:', response.body);
             expect(response.body._id).toBeDefined();
             expect(response.body.brand).toBe(newTruck.brand);
             expect(response.body.load).toBe(newTruck.load);
