@@ -21,9 +21,18 @@ beforeEach(async () => {
 
     // Start the server on a different port for testing
     server = app.listen(5001); // Ensure a unique port for testing
+
+    // Insert sample employee data
+    await Employee.insertMany([
+        { name: 'John', surname: 'Doe', seniority: 5, type: 'mechanic', category: 'A', testFlag: true },
+        { name: 'Jane', surname: 'Smith', seniority: 4, type: 'driver', category: 'B', testFlag: true },
+        { name: 'Emily', surname: 'Jones', seniority: 3, type: 'mechanic', category: 'B', testFlag: true },
+    ]);
 });
 
 afterEach(async () => {
+    // Remove only documents with the testFlag
+    await Employee.deleteMany({ name: { $in: ['John', 'Jane', 'Emily'] } });
     server.close();
     await mongoose.disconnect();
     await mongoServer.stop();
@@ -31,14 +40,6 @@ afterEach(async () => {
 
 describe('Employee API integration tests', () => {
     it('GET /api/employees - should fetch all employees', async () => {
-
-        // Insert sample employee data
-        await Employee.insertMany([
-            { name: 'John', surname: 'Doe', seniority: 5, type: 'mechanic', category: 'A' },
-            { name: 'Jane', surname: 'Smith', seniority: 4, type: 'driver', category: 'B' },
-            { name: 'Emily', surname: 'Jones', seniority: 3, type: 'mechanic', category: 'B' },
-        ]);
-
         // Fetch the employees from the API
         const response = await request(app).get('/api/employees');
 

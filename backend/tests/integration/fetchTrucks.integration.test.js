@@ -21,9 +21,17 @@ beforeEach(async () => {
 
     // Start the server on a different port for testing
     server = app.listen(5002); // Ensure a unique port for testing
+
+    // Insert test data into the in-memory database
+    await Truck.create([
+        { brand: 'Truck1', load: 1000, capacity: 5000, year: 2022, numberOfRepairs: 0, testFlag: true },
+        { brand: 'Truck2', load: 2000, capacity: 6000, year: 2023, numberOfRepairs: 1, testFlag: true }
+    ]);
 });
 
 afterEach(async () => {
+    // Remove only documents with the testFlag
+    await Truck.deleteMany({ brand: { $in: ['Truck1', 'Truck2'] } });
     server.close();
     await mongoose.disconnect();
     await mongoServer.stop();
@@ -31,13 +39,6 @@ afterEach(async () => {
 
 describe('Truck API integration tests', () => {
     it('GET /api/trucks - should fetch all trucks', async () => {
-
-        // Insert test data into the in-memory database
-        await Truck.create([
-            { brand: 'Truck1', load: 1000, capacity: 5000, year: 2022, numberOfRepairs: 0 },
-            { brand: 'Truck2', load: 2000, capacity: 6000, year: 2023, numberOfRepairs: 1 }
-        ]);
-
         // Fetch trucks from the API
         const response = await request(app).get('/api/trucks');
 
