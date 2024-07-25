@@ -65,7 +65,7 @@ describe('Create Truck API tests', () => {
 
         // Optional: Verify that the truck was actually saved in the database
         const truckInDb = await Truck.findById(createdTruckId).lean(); // Use lean() to get a plain JS object
-        console.log('Truck in DB:', truckInDb); // Log for debugging
+        //console.log('Truck in DB:', truckInDb); // Log for debugging
 
         expect(truckInDb).toBeDefined();
         expect(truckInDb.brand).toBe(newTruck.brand);

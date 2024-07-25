@@ -1,39 +1,22 @@
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const express = require('express');
-const request = require('supertest');
-const trucksRoutes = require('../../routes/trucks');
+const { getAllTrucks } = require('../../routes/trucks');
+const Truck = require('../../models/Truck');
 
-let app;
-let mongoServer;
+jest.mock('../../models/Truck'); // Mock the Truck model
 
-beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
-    const mongoUri = mongoServer.getUri();
-
-    await mongoose.connect(mongoUri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+describe('Truck Retrieval Handler', () => {
+    test('getAllTrucks should return a list of trucks', async () => {
+        const trucks = [{ brand: 'Test Brand', load: 1000, capacity: 2000, year: 2024, numberOfRepairs: 0 }];
+        Truck.find.mockResolvedValue(trucks);
+        
+        const req = {};
+        const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+        };
+        
+        await getAllTrucks(req, res);
+        
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith(trucks);
     });
-
-    app = express();
-    app.use(express.json());
-    app.use('/api/trucks', trucksRoutes);
-});
-
-afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
-});
-
-describe('Trucks API', () => {
-    it('should fetch all trucks', async () => {
-        const collection = mongoose.connection.collection('trucks');
-        await collection.insertMany([{ brand: 'Truck 1', load: 10, capacity: 20, year: 2020, numberOfRepairs: 1 }, { brand: 'Truck 2', load: 15, capacity: 25, year: 2021, numberOfRepairs: 2 }]);
-
-        const response = await request(app).get('/api/trucks');
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toBeInstanceOf(Array);
-        expect(response.body.length).toBe(2);
-    });
-});
+})

@@ -1,19 +1,20 @@
 const express = require('express');
-const Truck = require('../models/Truck'); // Adjust the path as needed
+const Truck = require('../models/Truck');
 const router = express.Router();
 
-// Route for fetching trucks
-router.get('/', async (req, res) => {
+// Handler functions
+// Fetch Trucks
+const getAllTrucks = async (req, res) => {
     try {
         const trucks = await Truck.find({});
         res.status(200).json(trucks);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-});
+};
 
-// Route for creating a new truck
-router.post('/', async (req, res) => {
+// Create Truck
+const createTruck = async (req, res) => {
     const newTruck = new Truck(req.body);
     try {
         const savedTruck = await newTruck.save();
@@ -21,10 +22,10 @@ router.post('/', async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-});
+};
 
-// Route for updating a truck
-router.put('/:id', async (req, res) => {
+// Update Truck
+const updateTruck = async (req, res) => {
     const { id } = req.params;
     const updatedTruck = req.body;
     try {
@@ -37,10 +38,10 @@ router.put('/:id', async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-});
+};
 
-// Route for deleting a truck
-router.delete('/:id', async (req, res) => {
+// Delete Truck
+const deleteTruck = async (req, res) => {
     const { id } = req.params;
     try {
         const result = await Truck.findByIdAndDelete(id);
@@ -52,6 +53,19 @@ router.delete('/:id', async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-});
+};
 
-module.exports = router;
+// Routes
+router.get('/', getAllTrucks);
+router.post('/', createTruck);
+router.put('/:id', updateTruck);
+router.delete('/:id', deleteTruck);
+
+// Export handlers for testing
+module.exports = {
+    router,
+    getAllTrucks,
+    createTruck,
+    updateTruck,
+    deleteTruck
+};

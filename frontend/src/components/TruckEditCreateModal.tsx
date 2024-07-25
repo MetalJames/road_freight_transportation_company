@@ -65,9 +65,11 @@ const TruckEditCreateModal: React.FC<TruckFormModalProps> = ({ truck, isCreating
                     <input
                         type="text"
                         name="numberOfRepairs"
-                        value={truck?.numberOfRepairs || ''}
+                        //have to do this weird thing as '0' is not deletable otherwise
+                        value={truck?.numberOfRepairs !== undefined && truck?.numberOfRepairs !== null ? truck.numberOfRepairs : ''}
+                        // value={truck?.numberOfRepairs || ''}
                         onChange={onChange}
-                        placeholder="Enter number of repairs"
+                        placeholder="Enter number of repairs(By default is '0')"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>

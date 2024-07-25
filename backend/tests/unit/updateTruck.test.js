@@ -1,68 +1,37 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const express = require('express');
-const trucksRoutes = require('../../routes/trucks');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+const { updateTruck } = require('../../routes/trucks');
 const Truck = require('../../models/Truck');
 
-let app;
-let mongoServer;
+jest.mock('../../models/Truck'); // Mock the Truck model
 
-beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
-    const mongoUri = mongoServer.getUri();
-
-    await mongoose.connect(mongoUri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-
-    app = express();
-    app.use(express.json());
-    app.use('/api/trucks', trucksRoutes);
-});
-
-afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
-});
-
-describe('Update Truck', () => {
-    let truckId;
-
-    // Create a truck before running the update test
-    beforeEach(async () => {
-        const result = await Truck.create({
-            brand: 'Truck to be updated',
-            load: 10,
-            capacity: 20,
-            year: 2024,
-            numberOfRepairs: 0
-        });
-        truckId = result._id;
-    });
-
-    it('should update a truck', async () => {
-        const updatedTruck = {
-            brand: 'Updated Truck',
-            load: 15,
-            capacity: 25,
-            year: 2025,
-            numberOfRepairs: 1
+describe('Truck Update Handler', () => {
+    test('updateTruck should update a truck', async () => {
+        const updatedTruck = { brand: 'Updated Brand', load: 1600, capacity: 2600, year: 2026, numberOfRepairs: 2 };
+        // Mocking the return value to include _id
+        Truck.findByIdAndUpdate.mockResolvedValue({ ...updatedTruck, _id: '12345' });
+        
+        const req = { params: { id: '12345' }, body: updatedTruck };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
         };
         
-        // Send PUT request to the API
-        const response = await request(app)
-            .put(`/api/trucks/${truckId}`)
-            .send(updatedTruck)
-            .expect('Content-Type', /json/)
-            .expect(200);
+        await updateTruck(req, res);
+        
+        expect(res.status).toHaveBeenCalledWith(200);
 
-        // Check the response
-        expect(response.body.message).toBe('Truck updated successfully');
+        // Get the actual response object
+        const responseObject = res.json.mock.calls[0][0];
 
-        // Verify the update in the database
-        const truck = await Truck.findById(truckId);
-        expect(truck).toEqual(expect.objectContaining(updatedTruck));
+        // Assert that the response has the expected properties and ignore _id
+        expect(responseObject).toHaveProperty('message', 'Truck updated successfully');
+        expect(responseObject).toHaveProperty('truck');
+        const { truck } = responseObject;
+        expect(truck).toMatchObject({
+            brand: updatedTruck.brand,
+            load: updatedTruck.load,
+            capacity: updatedTruck.capacity,
+            year: updatedTruck.year,
+            numberOfRepairs: updatedTruck.numberOfRepairs
+        });
     });
 });

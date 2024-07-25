@@ -1,59 +1,21 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const express = require('express');
-const trucksRoutes = require('../../routes/trucks');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+const { deleteTruck } = require('../../routes/trucks');
 const Truck = require('../../models/Truck');
 
-let app;
-let mongoServer;
+jest.mock('../../models/Truck'); // Mock the Truck model
 
-beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
-    const mongoUri = mongoServer.getUri();
-
-    await mongoose.connect(mongoUri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-
-    app = express();
-    app.use(express.json());
-    app.use('/api/trucks', trucksRoutes);
-});
-
-afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
-});
-
-describe('Delete Truck', () => {
-    let truckId;
-
-    // Create a truck before running the delete test
-    beforeEach(async () => {
-        const result = await Truck.create({
-            brand: 'Truck to be deleted',
-            load: 10,
-            capacity: 20,
-            year: 2024,
-            numberOfRepairs: 0
-        });
-        truckId = result._id;
-    });
-
-    it('should delete a truck', async () => {
-        // Send DELETE request to the API
-        const response = await request(app)
-            .delete(`/api/trucks/${truckId}`)
-            .expect('Content-Type', /json/)
-            .expect(200);
-
-        // Check the response
-        expect(response.body.message).toBe('Truck deleted successfully');
-
-        // Check if the truck was actually deleted
-        const truck = await Truck.findById(truckId);
-        expect(truck).toBeNull();
+describe('Truck Deletion Handler', () => {
+    test('deleteTruck should delete a truck', async () => {
+        Truck.findByIdAndDelete.mockResolvedValue({ _id: '12345' });
+        
+        const req = { params: { id: '12345' } };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+        
+        await deleteTruck(req, res);
+        
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ message: 'Truck deleted successfully' });
     });
 });

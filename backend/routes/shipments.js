@@ -2,14 +2,28 @@ const express = require('express');
 const Shipment = require('../models/Shipment');
 const router = express.Router();
 
-// Route for fetching shipments
-router.get('/', async (req, res) => {
+// Handler functions
+// Fetch Shipments
+const getAllShipments = async (req, res) => {
     try {
         const shipments = await Shipment.find({});
         res.status(200).json(shipments);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-});
+};
 
-module.exports = router;
+// Routes
+router.get('/', getAllShipments);
+// router.post('/', createRepairShipment);
+// router.put('/:id', updateRepairShipment);
+// router.delete('/:id', deleteRepairShipment);
+
+// Export handlers for testing
+module.exports = {
+    router,
+    getAllShipments,
+    // createRepairShipment,
+    // updateRepairShipment,
+    // deleteRepairShipment
+};

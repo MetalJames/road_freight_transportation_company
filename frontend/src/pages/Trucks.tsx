@@ -39,9 +39,9 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        const numberValue = name === 'numberOfRepairs' || name === 'load' || name === 'capacity' || name === 'year'
+        const numberValue = value === '' ? '' : (name === 'numberOfRepairs' || name === 'load' || name === 'capacity' || name === 'year'
             ? Number(value)
-            : value;
+            : value);
 
         if (isCreating) {
             setNewTruck({
