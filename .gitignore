@@ -35,3 +35,6 @@ dist-ssr
 coverage/
 *.html
 *.css
+
+# Exclude old folder with js files
+old_js_stuff

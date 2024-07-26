@@ -1,11 +1,11 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const app = require('../../server');
-const Employee = require('../../models/Employee');
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import app from '../../server';
+import Employee from '../../models/Employee';
 
-let mongoServer;
-let server;
+let mongoServer: MongoMemoryServer;
+let server: any;
 
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
@@ -13,10 +13,7 @@ beforeEach(async () => {
     const mongoUri = mongoServer.getUri();
 
     if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(mongoUri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(mongoUri);
     }
 
     // Start the server on a different port for testing
@@ -24,9 +21,9 @@ beforeEach(async () => {
 
     // Insert sample employee data
     await Employee.insertMany([
-        { name: 'John', surname: 'Doe', seniority: 5, type: 'mechanic', category: 'A', testFlag: true },
-        { name: 'Jane', surname: 'Smith', seniority: 4, type: 'driver', category: 'B', testFlag: true },
-        { name: 'Emily', surname: 'Jones', seniority: 3, type: 'mechanic', category: 'B', testFlag: true },
+        { name: 'John', surname: 'Doe', seniority: 5, type: 'mechanic', category: 'A' },
+        { name: 'Jane', surname: 'Smith', seniority: 4, type: 'driver', category: 'B' },
+        { name: 'Emily', surname: 'Jones', seniority: 3, type: 'mechanic', category: 'B' },
     ]);
 });
 
@@ -41,7 +38,7 @@ afterEach(async () => {
 describe('Employee API integration tests', () => {
     it('GET /api/employees - should fetch all employees', async () => {
         // Fetch the employees from the API
-        const response = await request(app).get('/api/employees');
+        const response = await request(server).get('/api/employees');
 
         // Fetch the expected count from the database
         const employeeCount = await Employee.countDocuments({});
@@ -51,8 +48,8 @@ describe('Employee API integration tests', () => {
         expect(Array.isArray(response.body)).toBeTruthy();
         expect(response.body).toHaveLength(employeeCount); // Compare length dynamically
 
-        // Check that the response contains trucks with expected properties
-        response.body.forEach(employee => {
+        // Check that the response contains employees with expected properties
+        response.body.forEach((employee: any) => {
             expect(employee).toHaveProperty('name');
             expect(employee).toHaveProperty('surname');
             expect(employee).toHaveProperty('seniority');

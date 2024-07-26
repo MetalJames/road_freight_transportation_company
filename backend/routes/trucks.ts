@@ -1,31 +1,32 @@
-const express = require('express');
-const Truck = require('../models/Truck');
+import express, { Request, Response } from 'express';
+import Truck from '../models/Truck'; // Importing the model
+
 const router = express.Router();
 
 // Handler functions
 // Fetch Trucks
-const getAllTrucks = async (req, res) => {
+const getAllTrucks = async (req: Request, res: Response): Promise<void> => {
     try {
         const trucks = await Truck.find({});
         res.status(200).json(trucks);
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
 
 // Create Truck
-const createTruck = async (req, res) => {
+const createTruck = async (req: Request, res: Response): Promise<void> => {
     const newTruck = new Truck(req.body);
     try {
         const savedTruck = await newTruck.save();
         res.status(201).json(savedTruck);
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
 
 // Update Truck
-const updateTruck = async (req, res) => {
+const updateTruck = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const updatedTruck = req.body;
     try {
@@ -35,13 +36,13 @@ const updateTruck = async (req, res) => {
         } else {
             res.status(404).json({ message: 'Truck not found' });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
 
 // Delete Truck
-const deleteTruck = async (req, res) => {
+const deleteTruck = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {
         const result = await Truck.findByIdAndDelete(id);
@@ -50,7 +51,7 @@ const deleteTruck = async (req, res) => {
         } else {
             res.status(404).json({ message: 'Truck not found' });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -62,10 +63,10 @@ router.put('/:id', updateTruck);
 router.delete('/:id', deleteTruck);
 
 // Export handlers for testing
-module.exports = {
-    router,
+export {
+    router as TruckRoutes,
     getAllTrucks,
     createTruck,
     updateTruck,
-    deleteTruck
+    deleteTruck,
 };

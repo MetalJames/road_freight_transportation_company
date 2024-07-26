@@ -1,12 +1,12 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const app = require('../../server');
-const Truck = require('../../models/Truck');
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import app from '../../server';
+import Truck from '../../models/Truck';
 
-let mongoServer;
-let server;
-let createdTruckToBeDeletedId;
+let mongoServer: MongoMemoryServer;
+let server: any;
+let createdTruckToBeDeletedId: mongoose.Types.ObjectId;
 
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
@@ -14,10 +14,7 @@ beforeEach(async () => {
     const mongoUri = mongoServer.getUri();
 
     if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(mongoUri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(mongoUri);
     }
 
     // Start the server on a different port for testing
@@ -30,7 +27,6 @@ afterEach(async () => {
     await mongoServer.stop();
 });
 
-
 describe('DELETE /api/trucks/:id', () => {
 
     beforeEach(async () => {
@@ -41,7 +37,7 @@ describe('DELETE /api/trucks/:id', () => {
             year: 2024,
             numberOfRepairs: 0
         });
-        createdTruckToBeDeletedId = result._id;
+        createdTruckToBeDeletedId = result._id as mongoose.Types.ObjectId;
     });
 
     it('DELETE /api/trucks/:id - should delete a truck', async () => {

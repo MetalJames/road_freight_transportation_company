@@ -1,31 +1,32 @@
-const express = require('express');
-const Employee = require('../models/Employee');
+import express, { Request, Response } from 'express';
+import Employee from '../models/Employee'; // Importing the model
+
 const router = express.Router();
 
 // Handler functions
 // Fetch Employees
-const getAllEmployees = async (req, res) => {
+const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
     try {
         const employees = await Employee.find({});
         res.status(200).json(employees);
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
 
 // Create Employee
-const createEmployee = async (req, res) => {
+const createEmployee = async (req: Request, res: Response): Promise<void> => {
     const newEmployee = new Employee(req.body);
     try {
         const savedEmployee = await newEmployee.save();
         res.status(201).json(savedEmployee);
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
 
 // Update Employee
-const updateEmployee = async (req, res) => {
+const updateEmployee = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const updatedEmployee = req.body;
     try {
@@ -35,13 +36,13 @@ const updateEmployee = async (req, res) => {
         } else {
             res.status(404).json({ message: 'Employee not found' });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
 
 // Delete Employee
-const deleteEmployee = async (req, res) => {
+const deleteEmployee = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {
         const result = await Employee.findByIdAndDelete(id);
@@ -50,7 +51,7 @@ const deleteEmployee = async (req, res) => {
         } else {
             res.status(404).json({ message: 'Employee not found' });
         }
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 };
@@ -62,10 +63,10 @@ router.put('/:id', updateEmployee);
 router.delete('/:id', deleteEmployee);
 
 // Export handlers for testing
-module.exports = {
-    router,
+export {
+    router as EmployeeRoutes,
     getAllEmployees,
     createEmployee,
     updateEmployee,
-    deleteEmployee
+    deleteEmployee,
 };

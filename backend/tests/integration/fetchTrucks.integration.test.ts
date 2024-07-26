@@ -1,11 +1,11 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const app = require('../../server');
-const Truck = require('../../models/Truck');
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import app from '../../server';
+import Truck from '../../models/Truck';
 
-let mongoServer;
-let server;
+let mongoServer: MongoMemoryServer;
+let server: any;
 
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
@@ -13,10 +13,7 @@ beforeEach(async () => {
     const mongoUri = mongoServer.getUri();
 
     if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(mongoUri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(mongoUri);
     }
 
     // Start the server on a different port for testing
@@ -24,13 +21,13 @@ beforeEach(async () => {
 
     // Insert test data into the in-memory database
     await Truck.create([
-        { brand: 'Truck1', load: 1000, capacity: 5000, year: 2022, numberOfRepairs: 0, testFlag: true },
-        { brand: 'Truck2', load: 2000, capacity: 6000, year: 2023, numberOfRepairs: 1, testFlag: true }
+        { brand: 'Truck1', load: 1000, capacity: 5000, year: 2022, numberOfRepairs: 0 },
+        { brand: 'Truck2', load: 2000, capacity: 6000, year: 2023, numberOfRepairs: 1 }
     ]);
 });
 
 afterEach(async () => {
-    // Remove only documents with the testFlag
+    // Remove only specific test data
     await Truck.deleteMany({ brand: { $in: ['Truck1', 'Truck2'] } });
     server.close();
     await mongoose.disconnect();
@@ -40,7 +37,7 @@ afterEach(async () => {
 describe('Truck API integration tests', () => {
     it('GET /api/trucks - should fetch all trucks', async () => {
         // Fetch trucks from the API
-        const response = await request(app).get('/api/trucks');
+        const response = await request(server).get('/api/trucks');
 
         // Fetch the count of existing trucks from the database
         const trucksCount = await Truck.countDocuments({});
@@ -51,7 +48,7 @@ describe('Truck API integration tests', () => {
         expect(response.body).toHaveLength(trucksCount); // Compare length dynamically
 
         // Check that the response contains trucks with expected properties
-        response.body.forEach(truck => {
+        response.body.forEach((truck: any) => {
             expect(truck).toHaveProperty('brand');
             expect(truck).toHaveProperty('load');
             expect(truck).toHaveProperty('capacity');
@@ -60,4 +57,3 @@ describe('Truck API integration tests', () => {
         });
     });
 });
-

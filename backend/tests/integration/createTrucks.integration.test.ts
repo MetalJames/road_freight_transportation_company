@@ -1,12 +1,12 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const app = require('../../server');
-const Truck = require('../../models/Truck');
+import request from 'supertest';
+import mongoose, { Types } from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import app from '../../server';
+import Truck from '../../models/Truck';
 
-let mongoServer;
-let server;
-let createdTruckId;
+let mongoServer: MongoMemoryServer;
+let server: any;
+let createdTruckId: Types.ObjectId | undefined;
 
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
@@ -14,10 +14,7 @@ beforeEach(async () => {
     const mongoUri = mongoServer.getUri();
 
     if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(mongoUri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(mongoUri);
     }
 
     // Start the server on a different port for testing
@@ -52,7 +49,7 @@ describe('Create Truck API tests', () => {
             .expect('Content-Type', /json/)
             .expect(201); // Expect a 201 Created status
 
-        // Store and log the created truck ID
+        // Store the created truck ID
         createdTruckId = response.body._id;
 
         // Verify the response
@@ -65,13 +62,11 @@ describe('Create Truck API tests', () => {
 
         // Optional: Verify that the truck was actually saved in the database
         const truckInDb = await Truck.findById(createdTruckId).lean(); // Use lean() to get a plain JS object
-        //console.log('Truck in DB:', truckInDb); // Log for debugging
-
         expect(truckInDb).toBeDefined();
-        expect(truckInDb.brand).toBe(newTruck.brand);
-        expect(truckInDb.load).toBe(newTruck.load);
-        expect(truckInDb.capacity).toBe(newTruck.capacity);
-        expect(truckInDb.year).toBe(newTruck.year);
-        expect(truckInDb.numberOfRepairs).toBe(newTruck.numberOfRepairs);
+        expect(truckInDb?.brand).toBe(newTruck.brand);
+        expect(truckInDb?.load).toBe(newTruck.load);
+        expect(truckInDb?.capacity).toBe(newTruck.capacity);
+        expect(truckInDb?.year).toBe(newTruck.year);
+        expect(truckInDb?.numberOfRepairs).toBe(newTruck.numberOfRepairs);
     });
 });

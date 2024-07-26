@@ -1,12 +1,12 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const app = require('../../server');
-const Truck = require('../../models/Truck');
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import app from '../../server';
+import Truck from '../../models/Truck';
 
-let mongoServer;
-let server;
-let updatedTruckId;
+let mongoServer: MongoMemoryServer;
+let server: any;
+let updatedTruckId: mongoose.Types.ObjectId | undefined;
 
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
@@ -14,10 +14,7 @@ beforeEach(async () => {
     const mongoUri = mongoServer.getUri();
 
     if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(mongoUri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(mongoUri);
     }
 
     // Start the server on a different port for testing
@@ -45,7 +42,7 @@ describe('Update Truck API tests', () => {
             year: 2024,
             numberOfRepairs: 0
         });
-        updatedTruckId = result._id;
+        updatedTruckId = result._id as mongoose.Types.ObjectId;
     });
 
     it('PUT /api/trucks/:id - should update a truck', async () => {
@@ -56,7 +53,7 @@ describe('Update Truck API tests', () => {
             year: 2025,
             numberOfRepairs: 1
         };
-        
+
         // Send PUT request to the API
         const response = await request(server)
             .put(`/api/trucks/${updatedTruckId}`)

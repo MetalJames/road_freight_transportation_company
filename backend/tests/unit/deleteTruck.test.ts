@@ -1,17 +1,23 @@
-const { deleteTruck } = require('../../routes/trucks');
-const Truck = require('../../models/Truck');
+import { Request, Response } from 'express';
+import { deleteTruck } from '../../routes/trucks';
+import Truck from '../../models/Truck';
 
 jest.mock('../../models/Truck'); // Mock the Truck model
 
 describe('Truck Deletion Handler', () => {
     test('deleteTruck should delete a truck', async () => {
-        Truck.findByIdAndDelete.mockResolvedValue({ _id: '12345' });
-        
-        const req = { params: { id: '12345' } };
+        // Mock Truck.findByIdAndDelete to return an object with _id
+        (Truck.findByIdAndDelete as jest.Mock).mockResolvedValue({ _id: '12345' });
+
+        // Create mock request and response objects
+        const req = {
+            params: { id: '12345' }
+        } as unknown as Request;
+
         const res = {
             status: jest.fn().mockReturnThis(),
             json: jest.fn()
-        };
+        } as unknown as Response;
         
         await deleteTruck(req, res);
         
