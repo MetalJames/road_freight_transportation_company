@@ -96,11 +96,19 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
             }
         } else if (editTruck) {
             try {
-                const response = await axios.put(
-                    `http://localhost:5000/api/trucks/${editTruck._id}`,
-                    editTruck
-                );
+                // const response = await axios.put(
+                //     `http://localhost:5000/api/trucks/${editTruck._id}`,
+                //     editTruck
+                // );
+
+            const url = `http://localhost:5000/api/trucks/${editTruck._id}`;
+            console.log("Updating truck at URL:", url);
+            console.log("Payload:", editTruck);
+
+            const response = await axios.put(url, editTruck);
+            console.log("Truck updated successfully:", response.data);
                 console.log("Truck updated successfully:", response.data);
+                console.log(response)
 
                 // Update the truckList state without refreshing the page
                 setTrucks((prevTrucks) =>

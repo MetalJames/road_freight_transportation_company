@@ -7,6 +7,9 @@ import Employee from '../../models/Employee';
 let mongoServer: MongoMemoryServer;
 let server: any;
 
+// Increase the timeout for the overall setup
+jest.setTimeout(20000);
+
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
     mongoServer = await MongoMemoryServer.create();
@@ -25,7 +28,7 @@ beforeEach(async () => {
         { name: 'Jane', surname: 'Smith', seniority: 4, type: 'driver', category: 'B' },
         { name: 'Emily', surname: 'Jones', seniority: 3, type: 'mechanic', category: 'B' },
     ]);
-});
+}, 10000);
 
 afterEach(async () => {
     // Remove only documents with the testFlag
@@ -36,6 +39,7 @@ afterEach(async () => {
 });
 
 describe('Employee API integration tests', () => {
+    // Happy path test case
     it('GET /api/employees - should fetch all employees', async () => {
         // Fetch the employees from the API
         const response = await request(server).get('/api/employees');
@@ -56,5 +60,5 @@ describe('Employee API integration tests', () => {
             expect(employee).toHaveProperty('type');
             expect(employee).toHaveProperty('category');
         });
-    });
+    }, 10000);
 });

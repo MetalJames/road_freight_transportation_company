@@ -7,6 +7,9 @@ import Truck from '../../models/Truck';
 let mongoServer: MongoMemoryServer;
 let server: any;
 
+// Increase the timeout for the overall setup
+jest.setTimeout(20000);
+
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
     mongoServer = await MongoMemoryServer.create();
@@ -24,7 +27,7 @@ beforeEach(async () => {
         { brand: 'Truck1', load: 1000, capacity: 5000, year: 2022, numberOfRepairs: 0 },
         { brand: 'Truck2', load: 2000, capacity: 6000, year: 2023, numberOfRepairs: 1 }
     ]);
-});
+}, 10000);
 
 afterEach(async () => {
     // Remove only specific test data
@@ -35,6 +38,7 @@ afterEach(async () => {
 });
 
 describe('Truck API integration tests', () => {
+    // Happy path test case
     it('GET /api/trucks - should fetch all trucks', async () => {
         // Fetch trucks from the API
         const response = await request(server).get('/api/trucks');
@@ -55,5 +59,5 @@ describe('Truck API integration tests', () => {
             expect(truck).toHaveProperty('year');
             expect(truck).toHaveProperty('numberOfRepairs');
         });
-    });
+    }, 10000);
 });

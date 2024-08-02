@@ -5,6 +5,7 @@ import Truck from '../../models/Truck';
 jest.mock('../../models/Truck'); // Mock the Truck model
 
 describe('Truck Update Handler', () => {
+    // Happy path test case
     test('updateTruck should update a truck', async () => {
         const updatedTruck = { brand: 'Updated Brand', load: 1600, capacity: 2600, year: 2026, numberOfRepairs: 2 };
         // Mocking the return value to include _id

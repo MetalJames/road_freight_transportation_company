@@ -5,6 +5,7 @@ import Truck from '../../models/Truck';
 jest.mock('../../models/Truck'); // Mock the Truck model
 
 describe('Truck Retrieval Handler', () => {
+    // Happy path test case
     test('getAllTrucks should return a list of trucks', async () => {
         const trucks = [{ brand: 'Test Brand', load: 1000, capacity: 2000, year: 2024, numberOfRepairs: 0 }];
         

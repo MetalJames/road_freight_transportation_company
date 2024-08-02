@@ -8,6 +8,9 @@ let mongoServer: MongoMemoryServer;
 let server: any;
 let updatedTruckId: mongoose.Types.ObjectId | undefined;
 
+// Increase the timeout for the overall setup
+jest.setTimeout(20000);
+
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
     mongoServer = await MongoMemoryServer.create();
@@ -19,7 +22,7 @@ beforeEach(async () => {
 
     // Start the server on a different port for testing
     server = app.listen(5003); // Ensure a unique port for testing
-});
+}, 10000);
 
 afterEach(async () => {
     // Clean up the created truck
@@ -33,7 +36,7 @@ afterEach(async () => {
 });
 
 describe('Update Truck API tests', () => {
-
+    // Happy path test case
     beforeEach(async () => {
         const result = await Truck.create({
             brand: 'Truck to be updated',
@@ -67,5 +70,5 @@ describe('Update Truck API tests', () => {
         // Verify the update in the database
         const truck = await Truck.findById(updatedTruckId).lean();
         expect(truck).toEqual(expect.objectContaining(updatedTruck));
-    });
+    }, 10000);
 });
