@@ -8,6 +8,9 @@ let mongoServer: MongoMemoryServer;
 let server: any;
 let createdTruckId: Types.ObjectId | undefined;
 
+// Increase the timeout for the overall setup
+jest.setTimeout(20000);
+
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
     mongoServer = await MongoMemoryServer.create();
@@ -19,7 +22,7 @@ beforeEach(async () => {
 
     // Start the server on a different port for testing
     server = app.listen(5005); // Ensure a unique port for testing
-});
+}, 10000);
 
 afterEach(async () => {
     // Clean up the created truck
@@ -33,6 +36,7 @@ afterEach(async () => {
 });
 
 describe('Create Truck API tests', () => {
+    // Happy path test case
     it('POST /api/trucks - should create a new truck', async () => {
         const newTruck = {
             brand: 'Truck 1',
@@ -68,5 +72,74 @@ describe('Create Truck API tests', () => {
         expect(truckInDb?.capacity).toBe(newTruck.capacity);
         expect(truckInDb?.year).toBe(newTruck.year);
         expect(truckInDb?.numberOfRepairs).toBe(newTruck.numberOfRepairs);
-    });
+    }, 10000);
+
+    // Negative test case
+    it('POST /api/trucks - should not create a truck with missing fields', async () => {
+        const newTruck = {
+            brand: 'Truck 1',
+            load: 10
+        };
+
+        const response = await request(server)
+            .post('/api/trucks')
+            .send(newTruck)
+            .expect('Content-Type', /json/)
+            .expect(400);
+
+        expect(response.body.errors).toBeDefined();
+    }, 10000);
+
+    // Negative test case
+    it('POST /api/trucks - should not create a truck with invalid data', async () => {
+        const newTruck = {
+            brand: 'Truck 1',
+            load: "invalid",
+            capacity: 20,
+            year: 2025,
+            numberOfRepairs: 0
+        };
+
+        const response = await request(server)
+            .post('/api/trucks')
+            .send(newTruck)
+            .expect('Content-Type', /json/)
+            .expect(400);
+
+        expect(response.body.errors).toBeDefined();
+    }, 10000);
+
+    // Edge test case
+    it('POST /api/trucks - should handle very large input values gracefully', async () => {
+        const newTruck = {
+            brand: 'Truck 1',
+            load: Number.MAX_SAFE_INTEGER,
+            capacity: Number.MAX_SAFE_INTEGER,
+            year: 9999,
+            numberOfRepairs: Number.MAX_SAFE_INTEGER
+        };
+
+        const response = await request(server)
+            .post('/api/trucks')
+            .send(newTruck)
+            .expect('Content-Type', /json/)
+            .expect(201);
+
+        createdTruckId = response.body._id;
+
+        expect(response.body._id).toBeDefined();
+        expect(response.body.brand).toBe(newTruck.brand);
+        expect(response.body.load).toBe(newTruck.load);
+        expect(response.body.capacity).toBe(newTruck.capacity);
+        expect(response.body.year).toBe(newTruck.year);
+        expect(response.body.numberOfRepairs).toBe(newTruck.numberOfRepairs);
+
+        const truckInDb = await Truck.findById(createdTruckId).lean();
+        expect(truckInDb).toBeDefined();
+        expect(truckInDb?.brand).toBe(newTruck.brand);
+        expect(truckInDb?.load).toBe(newTruck.load);
+        expect(truckInDb?.capacity).toBe(newTruck.capacity);
+        expect(truckInDb?.year).toBe(newTruck.year);
+        expect(truckInDb?.numberOfRepairs).toBe(newTruck.numberOfRepairs);
+    }, 10000);
 });

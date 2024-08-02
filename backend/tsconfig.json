@@ -11,7 +11,8 @@
     "types": ["node", "jest"] 
   },
   "include": [
-    "./*.ts",                                     // Include all TypeScript files in the backend folder.
+    "./*.ts",  
+    "src/**/*",                                   // Include all TypeScript files in the backend folder.
     "tests"
   ],
   "exclude": [

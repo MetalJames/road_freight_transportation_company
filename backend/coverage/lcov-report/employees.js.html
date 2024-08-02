@@ -132,6 +132,56 @@ router.get('/', async (req, res) =&gt; {
     }
 });
 &nbsp;
+
+// Route for adding a new employee
+router.post('/', async (req, res) =&gt; {
+    const newEmployee = req.body;
+    try {
+        const collection = req.db.collection('employees');
+        const result = await collection.insertOne(newEmployee);
+        res.status(201).json({ ...newEmployee, _id: result.insertedId }); // Return created employee with 201 status code
+    } catch (err) {
+<span class="cstat-no" title="statement not covered" >        res.status(500).json({ message: err.message }); </span>// Return error as JSON
+    }
+});
+&nbsp;
+// Route for updating a employee
+router.put('/:id', async (req, res) =&gt; {
+    const { id } = req.params;
+    const updatedEmployee = req.body;
+    try {
+        delete updatedEmployee._id;
+        const collection = req.db.collection('employees');
+        const result = await collection.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: updatedEmployee }
+        );
+        if (result.modifiedCount &gt; 0) {
+            res.status(200).json({ message: 'Employee details updated successfully' });
+        } else <span class="missing-if-branch" title="else path not taken" >E</span>{
+<span class="cstat-no" title="statement not covered" >            res.status(404).json({ message: 'Employee not found' });</span>
+        }
+    } catch (err) {
+<span class="cstat-no" title="statement not covered" >        res.status(500).json({ message: err.message });</span>
+    }
+});
+&nbsp;
+// Route for deleting an employee
+router.delete('/:id', async (req, res) =&gt; {
+    const { id } = req.params;
+    try {
+        const collection = req.db.collection('employees');
+        const result = await collection.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount &gt; 0) {
+            res.status(200).json({ message: 'Employee deleted successfully' });
+        } else <span class="missing-if-branch" title="else path not taken" >E</span>{
+<span class="cstat-no" title="statement not covered" >            res.status(404).json({ message: 'Employee not found' });</span>
+        }
+    } catch (err) {
+<span class="cstat-no" title="statement not covered" >        res.status(500).json({ message: err.message });</span>
+    }
+});
+&nbsp;
 module.exports = router;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -151,4 +201,3 @@ module.exports = router;</pre></td></tr></table></pre>
         <script src="block-navigation.js"></script>
     </body>
 </html>
-    

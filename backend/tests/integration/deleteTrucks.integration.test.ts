@@ -8,6 +8,9 @@ let mongoServer: MongoMemoryServer;
 let server: any;
 let createdTruckToBeDeletedId: mongoose.Types.ObjectId;
 
+// Increase the timeout for the overall setup
+jest.setTimeout(20000);
+
 beforeEach(async () => {
     // Start an in-memory MongoDB instance
     mongoServer = await MongoMemoryServer.create();
@@ -19,7 +22,7 @@ beforeEach(async () => {
 
     // Start the server on a different port for testing
     server = app.listen(5004); // Ensure a unique port for testing
-});
+}, 10000);
 
 afterEach(async () => {
     server.close();
@@ -28,7 +31,7 @@ afterEach(async () => {
 });
 
 describe('DELETE /api/trucks/:id', () => {
-
+    // Happy path test case
     beforeEach(async () => {
         const result = await Truck.create({
             brand: 'Truck to be deleted',
@@ -53,5 +56,5 @@ describe('DELETE /api/trucks/:id', () => {
         // Verify the truck is no longer in the database
         const deletedTruck = await Truck.findById(createdTruckToBeDeletedId);
         expect(deletedTruck).toBeNull();
-    });
+    }, 10000);
 });

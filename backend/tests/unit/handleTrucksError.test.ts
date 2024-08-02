@@ -5,6 +5,7 @@ import Truck from '../../models/Truck';
 jest.mock('../../models/Truck'); // Mock the Truck model
 
 describe('Truck Handlers', () => {
+    // Negative test case
     test('getAllTrucks should handle errors', async () => {
         // Mock Truck.find to simulate a rejected promise
         (Truck.find as jest.Mock).mockRejectedValue(new Error('Database error'));

@@ -21,7 +21,11 @@ const createTruck = async (req: Request, res: Response): Promise<void> => {
         const savedTruck = await newTruck.save();
         res.status(201).json(savedTruck);
     } catch (err: any) {
-        res.status(500).json({ message: err.message });
+        if (err.name === 'ValidationError') {
+            res.status(400).send({ errors: err.errors });
+        } else {
+            res.status(500).send({ error: 'Internal Server Error' });
+        }
     }
 };
 
