@@ -23,7 +23,7 @@ const App: React.FC = () => {
       try {
         const trucksResponse = await axiosInstance.get("/trucks");
         const employeesResponse = await axiosInstance.get("/employees");
-        const repairRecordsResponse = await axiosInstance.get("/repairRecords");
+        const repairRecordsResponse = await axiosInstance.get("/repairrecords");
         const customersResponse = await axiosInstance.get("/customers");
         const shipmentsResponse = await axiosInstance.get("/shipments");
         const tripsResponse = await axiosInstance.get("/trips");

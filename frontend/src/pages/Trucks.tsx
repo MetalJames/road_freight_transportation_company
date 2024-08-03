@@ -223,3 +223,5 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
 };
 
 export default Trucks;
+
+

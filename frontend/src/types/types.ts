@@ -7,12 +7,13 @@ export type TruckType = {
     numberOfRepairs: number;
 }
 
+
 export type CustomerType = {
     _id?: string; // Optional for new records
-    id: number;
+   // id: number;
     name: string;
     address: string;
-    phoneNumbers: string[]; // Array of phone numbers
+    phone: string[]; // Array of phone numbers
 }
 
 export type EmployeeType = {

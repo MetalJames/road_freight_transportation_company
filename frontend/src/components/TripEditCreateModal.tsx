@@ -1,75 +1,75 @@
 import React, { ChangeEvent, FormEvent } from 'react';
-import { TruckType } from '../types/types';
+import { TripsType } from '../types/types';
 
-type TruckFormModalProps = {
-    truck: TruckType | null;
+type TripFormModalProps = {
+    trip: TripsType | null;
     isCreating: boolean;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onSubmit: (e: FormEvent) => void;
     onCancel: () => void;
 }
 
-const TruckEditCreateModal: React.FC<TruckFormModalProps> = ({ truck, isCreating, onChange, onSubmit, onCancel }) => (
+const TripEditCreateModal: React.FC<TripFormModalProps> = ({ trip, isCreating, onChange, onSubmit, onCancel }) => (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
         <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4">
-                {isCreating ? "Create New Truck" : "Edit Truck"}
+                {isCreating ? "Create New Trip" : "Edit Trip"}
             </h3>
             <form onSubmit={onSubmit} className="space-y-4">
                 <label className="block">
-                    <span className="text-gray-700">Brand:</span>
+                    <span className="text-gray-700">Id:</span>
                     <input
                         type="text"
-                        name="brand"
-                        value={truck?.brand || ''}
+                        name="id"
+                        value={trip?.id || ''}
                         onChange={onChange}
-                        placeholder="Enter brand"
+                        placeholder="Enter id"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Load:</span>
+                    <span className="text-gray-700">From Route:</span>
                     <input
                         type="text"
-                        name="load"
-                        value={truck?.load || ''}
+                        name="route_from"
+                        value={trip?.route_from || ''}
                         onChange={onChange}
-                        placeholder="Enter load (kg)"
+                        placeholder="Enter route_from"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Capacity:</span>
+                    <span className="text-gray-700">To Route:</span>
                     <input
                         type="text"
-                        name="capacity"
-                        value={truck?.capacity || ''}
+                        name="route_to"
+                        value={trip?.route_to || ''}
                         onChange={onChange}
-                        placeholder="Enter capacity (kg)"
+                        placeholder="Enter route_to"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Year:</span>
+                    <span className="text-gray-700">Drivers:</span>
                     <input
                         type="text"
-                        name="year"
-                        value={truck?.year || ''}
+                        name="drivers"
+                        value={trip?.drivers || ''}
                         onChange={onChange}
-                        placeholder="Enter year"
+                        placeholder="Enter drivers"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Number of Repairs:</span>
+                    <span className="text-gray-700">Shipments:</span>
                     <input
                         type="text"
-                        name="numberOfRepairs"
+                        name="shipments"
                         //have to do this weird thing as '0' is not deletable otherwise
-                        value={truck?.numberOfRepairs !== undefined && truck?.numberOfRepairs !== null ? truck.numberOfRepairs : ''}
+                        value={trip?.shipments || ''}
                         // value={truck?.numberOfRepairs || ''}
                         onChange={onChange}
-                        placeholder="Enter number of repairs(By default is '0')"
+                        placeholder="Enter shipments"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
@@ -93,5 +93,5 @@ const TruckEditCreateModal: React.FC<TruckFormModalProps> = ({ truck, isCreating
     </div>
 );
 
-export default TruckEditCreateModal;
+export default TripEditCreateModal;
 
