@@ -50,26 +50,46 @@ const TripEditCreateModal: React.FC<TripFormModalProps> = ({ trip, isCreating, o
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Drivers:</span>
+                    <span className="text-gray-700">First Driver:</span>
                     <input
                         type="text"
-                        name="drivers"
-                        value={trip?.drivers || ''}
+                        name="driver_0"
+                        value={trip?.drivers[0] || ''}
                         onChange={onChange}
-                        placeholder="Enter drivers"
+                        placeholder="Enter first driver"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Shipments:</span>
+                    <span className="text-gray-700">Second Driver:</span>
                     <input
                         type="text"
-                        name="shipments"
-                        //have to do this weird thing as '0' is not deletable otherwise
-                        value={trip?.shipments || ''}
-                        // value={truck?.numberOfRepairs || ''}
+                        name="driver_1"
+                        value={trip?.drivers[1] || ''}
                         onChange={onChange}
-                        placeholder="Enter shipments"
+                        placeholder="Enter second driver"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
+                    />
+                </label>
+                <label className="block">
+                    <span className="text-gray-700">Shipment One:</span>
+                    <input
+                        type="text"
+                        name="shipment_0"
+                        value={trip?.shipments[0] || ''}
+                        onChange={onChange}
+                        placeholder="Enter first shipment"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
+                    />
+                </label>
+                <label className="block">
+                    <span className="text-gray-700">Shipment Two:</span>
+                    <input
+                        type="text"
+                        name="shipment_1"
+                        value={trip?.shipments[1] || ''}
+                        onChange={onChange}
+                        placeholder="Enter second shipment"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>

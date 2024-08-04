@@ -4,213 +4,248 @@ import { ShipmentsType } from "../types/types";
 import { ConfirmationModal, SuccessModal, ShipmentEditCreateModal } from "../components";
 
 type ShipmentsComponentProps = {
-  shipments: ShipmentsType[];
+    shipments: ShipmentsType[];
 }
 
 const Shipments: React.FC<ShipmentsComponentProps> = () => {
-  const [shipments, setShipments] = useState<ShipmentsType[]>([]);
-  const [editShipment, setEditShipment] = useState<ShipmentsType | null>(null);
-  const [newShipment, setNewShipment] = useState<ShipmentsType>({
-      id: 0,
-      weight: 0,
-      value: 0,
-      origin: '',
-      destination: ''
-  });
-  const [isCreating, setIsCreating] = useState<boolean>(false);
+    const [shipments, setShipments] = useState<ShipmentsType[]>([]);
+    const [editShipment, setEditShipment] = useState<ShipmentsType | null>(null);
+    const [newShipment, setNewShipment] = useState<ShipmentsType>({
+        shipmentId: '',
+        driverName: '',
+        customerName: '',
+        load: 0,
+        destination: '',
+        pickUpLocation: '',
+        value: 0,
+        shipmentDate: new Date(),
+        shouldBeDeliveredBefore: new Date()
+    });
+    const [isCreating, setIsCreating] = useState<boolean>(false);
 
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [shipmentToDelete, setShipmentToDelete] = useState<string | null>(null);
+    const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [shipmentToDelete, setShipmentToDelete] = useState<string | null>(null);
 
-  useEffect(() => {
-      const fetchShipments = async () => {
-          try {
-              const response = await axios.get("http://localhost:5000/api/shipments");
-              setShipments(response.data);
-          } catch (error) {
-              console.error("Error fetching shipments:", error);
-          }
-      };
+    useEffect(() => {
+        const fetchShipments = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/shipments");
+                setShipments(response.data);
+            } catch (error) {
+                console.error("Error fetching shipments:", error);
+            }
+        };
 
-      fetchShipments();
-  }, []);
+        fetchShipments();
+    }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      const numberValue = value === '' ? '' : (name === 'id' || name === 'weight' || name === 'value'
-          ? Number(value)
-          : value);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type } = e.target;
 
-      if (isCreating) {
-          setNewShipment({
-              ...newShipment,
-              [name]: numberValue
-          });
-      } else if (editShipment) {
-          setEditShipment({
-              ...editShipment,
-              [name]: numberValue
-          });
-      }
-  };
+        // Handle date input types differently
+        if (type === 'date') {
+            const dateValue = value ? new Date(value) : null;
 
-  const handleEditClick = (shipment: ShipmentsType) => {
-      setEditShipment(shipment);
-      setIsCreating(false); // Ensure we're not in "create" mode
-  };
+            if (isCreating) {
+                setNewShipment({
+                    ...newShipment,
+                    [name]: dateValue
+                });
+            } else if (editShipment) {
+                setEditShipment({
+                    ...editShipment,
+                    [name]: dateValue
+                });
+            }
+        } else {
+            // Handle number inputs differently
+            const numberValue = type === 'number' ? (value === '' ? '' : Number(value)) : value;
 
-  const handleCreateClick = () => {
-      setEditShipment(null);
-      setIsCreating(true); // Set the component to "create" mode
-  };
+            if (isCreating) {
+                setNewShipment({
+                    ...newShipment,
+                    [name]: numberValue
+                });
+            } else if (editShipment) {
+                setEditShipment({
+                    ...editShipment,
+                    [name]: numberValue
+                });
+            }
+        }
+    };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (isCreating) {
-          try {
-              const response = await axios.post("http://localhost:5000/api/shipments", newShipment);
-              console.log("Shipment created successfully:", response.data);
+    const handleEditClick = (shipment: ShipmentsType) => {
+        setEditShipment(shipment);
+        setIsCreating(false); // Ensure we're not in "create" mode
+    };
 
-              // Add the new Shipment to the list
-              setShipments([...shipments, response.data]);
+    const handleCreateClick = () => {
+        setEditShipment(null);
+        setIsCreating(true); // Set the component to "create" mode
+    };
 
-              // Clear the newShipment state
-              setNewShipment({
-                id: 0,
-                weight: 0,
-                value: 0,
-                origin: '',
-                destination: ''
-              });
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (isCreating) {
+            try {
+                const response = await axios.post("http://localhost:5000/api/shipments", newShipment);
+                console.log("Shipment created successfully:", response.data);
 
-              // Exit create mode
-              setIsCreating(false);
+                // Add the new Shipment to the list
+                setShipments([...shipments, response.data]);
 
-              // Set success message and open success modal
-              setSuccessMessage("Shipment created successfully.");
-              setIsSuccessModalOpen(true);
-          } catch (error) {
-              console.error("Error creating Shipment:", error);
-          }
-      } else if (editShipment) {
-          try {
-              const response = await axios.put(
-                  `http://localhost:5000/api/shipments/${editShipment._id}`,
-                  editShipment
-              );
-              console.log("Shipment updated successfully:", response.data);
+                // Clear the newShipment state
+                setNewShipment({
+                    shipmentId: '',
+                    driverName: '',
+                    customerName: '',
+                    load: 0,
+                    destination: '',
+                    pickUpLocation: '',
+                    value: 0,
+                    shipmentDate: new Date(),
+                    shouldBeDeliveredBefore: new Date()
+                });
 
-              // Update the ShipmentList state without refreshing the page
-              setShipments((prevShipments) =>
-                  prevShipments.map((shipment) =>
-                    shipment._id === editShipment._id ? editShipment : shipment
-                  )
-              );
+                // Exit create mode
+                setIsCreating(false);
 
-              // Clear the editShipment state to close the edit form
-              setEditShipment(null);
+                // Set success message and open success modal
+                setSuccessMessage("Shipment created successfully.");
+                setIsSuccessModalOpen(true);
+            } catch (error) {
+                console.error("Error creating Shipment:", error);
+            }
+        } else if (editShipment) {
+            try {
+                const response = await axios.put(
+                    `http://localhost:5000/api/shipments/${editShipment._id}`,
+                    editShipment
+                );
+                console.log("Shipment updated successfully:", response.data);
 
-              // Set success message and open success modal
-              setSuccessMessage("Shipment updated successfully.");
-              setIsSuccessModalOpen(true);
-          } catch (error) {
-              console.error("Error updating Shipment:", error);
-          }
-      }
-  };    
+                // Update the ShipmentList state without refreshing the page
+                setShipments((prevShipments) =>
+                    prevShipments.map((shipment) =>
+                        shipment._id === editShipment._id ? editShipment : shipment
+                    )
+                );
 
-  const handleCancel = () => {
-      setEditShipment(null);
-      setIsCreating(false); // Exit create mode
-  };
+                // Clear the editShipment state to close the edit form
+                setEditShipment(null);
 
-  const handleDeleteClick = (id1: string | undefined) => {
-      if (!id1) return;
-      setShipmentToDelete(id1);
-      setIsConfirmDeleteModalOpen(true);
-  };
+                // Set success message and open success modal
+                setSuccessMessage("Shipment updated successfully.");
+                setIsSuccessModalOpen(true);
+            } catch (error) {
+                console.error("Error updating Shipment:", error);
+            }
+        }
+    };    
 
-  const confirmDelete = async () => {
-      if (shipmentToDelete) {
-          try {
-              const response = await axios.delete(`http://localhost:5000/api/shipments/${shipmentToDelete}`);
-              if (response.status === 200) {
-                  setShipments((prevShipments) => prevShipments.filter((shipment) => shipment._id !== shipmentToDelete));
-                  
-                  // Set success message and open success modal
-                  setSuccessMessage("The shipment successfully deleted.");
-                  setIsSuccessModalOpen(true);
-              }
-          } catch (error) {
-              console.error("Error deleting shipment:", error);
-          }
-      }
-      setIsConfirmDeleteModalOpen(false);
-      setShipmentToDelete(null);
-  };
+    const handleCancel = () => {
+        setEditShipment(null);
+        setIsCreating(false); // Exit create mode
+    };
 
-  const cancelDelete = () => {
-      setIsConfirmDeleteModalOpen(false);
-      setShipmentToDelete(null);
-  };
+    const handleDeleteClick = (id1: string | undefined) => {
+        if (!id1) return;
+        setShipmentToDelete(id1);
+        setIsConfirmDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (shipmentToDelete) {
+            try {
+                const response = await axios.delete(`http://localhost:5000/api/shipments/${shipmentToDelete}`);
+                if (response.status === 200) {
+                    setShipments((prevShipments) => prevShipments.filter((shipment) => shipment._id !== shipmentToDelete));
+                    
+                    // Set success message and open success modal
+                    setSuccessMessage("The shipment successfully deleted.");
+                    setIsSuccessModalOpen(true);
+                }
+            } catch (error) {
+                console.error("Error deleting shipment:", error);
+            }
+        }
+        setIsConfirmDeleteModalOpen(false);
+        setShipmentToDelete(null);
+    };
+
+    const cancelDelete = () => {
+        setIsConfirmDeleteModalOpen(false);
+        setShipmentToDelete(null);
+    };
 
 
-  return (
-      <div className="p-6 bg-gray-100">
-          <h2 className="text-2xl font-bold mb-4">Shipments</h2>
-          <button 
-              onClick={handleCreateClick} 
-              className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
-          >
-              Create New Shipment
-          </button>
-          <ul className="space-y-4">
-              {shipments.map((shipment) => (
-              <li 
-                  key={shipment._id} 
-                  className="p-4 bg-white shadow rounded flex justify-between items-center"
-              >
-                  <div>
-                      <span className="block text-lg font-semibold">{shipment.id}</span>
-                      <span className="block text-sm text-gray-500">Weight: {shipment.weight}kg - Value: {shipment.value}</span>
-                      <span className="block text-sm text-gray-500">Origin: {shipment.origin} to Destination: {shipment.destination}</span>
-                  </div>
-                  <div>
-                      <button 
-                          onClick={() => handleEditClick(shipment)} 
-                          className="ml-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300"
-                      >
-                          Edit
-                      </button>
-                      <button
-                      onClick={() => handleDeleteClick(shipment._id)}
-                      className="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
-                      >
-                          Delete
-                      </button>
-                  </div>
-              </li>
-              ))}
-          </ul>
+    return (
+        <div className="p-6 bg-gray-100">
+            <h2 className="text-2xl font-bold mb-4">Shipments</h2>
+            <button 
+                onClick={handleCreateClick} 
+                className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
+            >
+                Create New Shipment
+            </button>
+            <ul className="space-y-4">
+                {shipments.map((shipment) => (
+                    <li
+                        key={shipment._id}
+                        className="p-4 bg-white shadow rounded flex justify-between items-center"
+                    >
+                        <div>
+                            <span className="block text-lg font-semibold">{shipment.shipmentId}</span>
+                            <span className="block text-sm text-gray-500">Driver: {shipment.driverName}</span>
+                            <span className="block text-sm text-gray-500">Customer: {shipment.customerName}</span>
+                            <span className="block text-sm text-gray-500">Load: {shipment.load}kg</span>
+                            <span className="block text-sm text-gray-500">Destination: {shipment.destination}</span>
+                            <span className="block text-sm text-gray-500">Pick-Up Location: {shipment.pickUpLocation}</span>
+                            <span className="block text-sm text-gray-500">Value: ${shipment.value}</span>
+                            <span className="block text-sm text-gray-500">
+                                Shipment Date: {shipment.shipmentDate ? new Date(shipment.shipmentDate).toDateString() : 'N/A'}
+                            </span>
+                            <span className="block text-sm text-gray-500">
+                                Should Be Delivered Before: {shipment.shouldBeDeliveredBefore ? new Date(shipment.shouldBeDeliveredBefore).toDateString() : 'N/A'}
+                            </span>
+                        </div>
+                        <div>
+                            <button
+                                onClick={() => handleEditClick(shipment)}
+                                className="ml-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300"
+                            >
+                                Edit
+                            </button>
+                            <button
+                                onClick={() => handleDeleteClick(shipment._id)}
+                                className="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
 
-          {(isCreating || editShipment) && (
-              <ShipmentEditCreateModal
-                  shipment={isCreating ? newShipment : editShipment}
-                  isCreating={isCreating}
-                  onChange={handleInputChange}
-                  onSubmit={handleSubmit}
-                  onCancel={handleCancel}
-              />
-          )}
-          {isConfirmDeleteModalOpen && (
-              <ConfirmationModal onConfirm={confirmDelete} onCancel={cancelDelete} />
-          )}
-          {isSuccessModalOpen && (
-              <SuccessModal message={successMessage} onClose={() => setIsSuccessModalOpen(false)} />
-          )}
-      </div>
-  );
+            {(isCreating || editShipment) && (
+                <ShipmentEditCreateModal
+                    shipment={isCreating ? newShipment : editShipment}
+                    isCreating={isCreating}
+                    onChange={handleInputChange}
+                    onSubmit={handleSubmit}
+                    onCancel={handleCancel}
+                />
+            )}
+            {isConfirmDeleteModalOpen && (
+                <ConfirmationModal onConfirm={confirmDelete} onCancel={cancelDelete} />
+            )}
+            {isSuccessModalOpen && (
+                <SuccessModal message={successMessage} onClose={() => setIsSuccessModalOpen(false)} />
+            )}
+        </div>
+    );
 };
 export default Shipments;

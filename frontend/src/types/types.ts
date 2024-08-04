@@ -38,11 +38,15 @@ export type RepairRecordType = {
 
 export type ShipmentsType = {
     _id?: string; // _id is optional for new shipments
-    id: number;
-    weight: number;
-    value: number;
-    origin: string;
+    shipmentId: string;
+    driverName: string;
+    customerName: string;
+    load: number;
     destination: string;
+    pickUpLocation: string; // Added field
+    value: number; // Added field
+    shipmentDate: Date;
+    shouldBeDeliveredBefore: Date;
 }
 
 export type TripsType =  {

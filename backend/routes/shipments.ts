@@ -15,13 +15,19 @@ const getAllShipments = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Create Shipments
+
 const createShipment = async (req: Request, res: Response): Promise<void> => {
     const newShipment = new Shipment(req.body);
     try {
         const savedShipment = await newShipment.save();
         res.status(201).json(savedShipment);
     } catch (err: any) {
-        res.status(500).json({ message: err.message });
+        console.error('Error creating shipment:', err);
+        if (err.name === 'ValidationError') {
+            res.status(400).json({ errors: err.errors });
+        } else {
+            res.status(500).json({ message: err.message });
+        }
     }
 };
 
