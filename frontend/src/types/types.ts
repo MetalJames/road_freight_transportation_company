@@ -12,26 +12,28 @@ export type CustomerType = {
     _id?: string; // Optional for new records
    // id: number;
     name: string;
+    surname: string;
     address: string;
     phone: string[]; // Array of phone numbers
 }
 
 export type EmployeeType = {
     _id?: string; // Optional for new records
-    id: number;
+    //id: number;
     name: string;
     surname: string;
     seniority: number; // Number of years
-    type: "driver" | "mechanic" | "other"; // Add other types as needed
+    type: 'Driver' | 'Mechanic' | 'Other'; // Add other types as needed
     category: string; // Category such as "A", "B", etc.
+    specializedBrand?: string; // Category such as "Ford", "Volvo", etc.
 }
 
 
 export type RepairRecordType = {
     _id?: string; // Optional for new records
-    id: number;
+    recordId: string;
     mechanic: string;
-    estimatedRepairTime: number; // In hours
+    estimatedRepairTime: string; // In hours
     truck: string; // Truck brand or model
 }
 
@@ -51,7 +53,7 @@ export type ShipmentsType = {
 
 export type TripsType =  {
     _id?: string; // Optional for new trips
-    id: number;
+    tripId: string;
     route_from: string;
     route_to: string;
     drivers: string[]; // Array of driver names

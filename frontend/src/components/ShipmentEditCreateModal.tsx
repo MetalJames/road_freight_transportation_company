@@ -10,20 +10,31 @@ type ShipmentFormModalProps = {
 }
 
 const ShipmentEditCreateModal: React.FC<ShipmentFormModalProps> = ({ shipment, isCreating, onChange, onSubmit, onCancel }) => {
-    // Helper function to format Date object to YYYY-MM-DD string
-    const formatDate = (date: Date | undefined | null): string => {
-        if (!(date instanceof Date) || isNaN(date.getTime())) {
+    // // Helper function to format Date object to YYYY-MM-DD string
+    // const formatDate = (date: Date | undefined | null): string => {
+    //     if (!(date instanceof Date) || isNaN(date.getTime())) {
+    //         return ''; // Return an empty string if date is invalid or null
+    //     }
+    //     const year = date.getFullYear();
+    //     const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    //     const day = date.getDate().toString().padStart(2, '0');
+    //     return `${year}-${month}-${day}`;
+    // };
+
+    const formatDate = (date: Date | string | undefined | null): string => {
+        if (!date) {
             return ''; // Return an empty string if date is invalid or null
         }
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        const dateObj = new Date(date);
+        if (isNaN(dateObj.getTime())) {
+            return ''; // Return an empty string if date is invalid
+        }
+        return dateObj.toISOString().split('T')[0];
     };
 
     return (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+            <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg max-h-screen overflow-y-auto">
                 <h3 className="text-xl font-semibold mb-4">
                     {isCreating ? "Create New Shipment" : "Edit Shipment"}
                 </h3>
@@ -62,6 +73,28 @@ const ShipmentEditCreateModal: React.FC<ShipmentFormModalProps> = ({ shipment, i
                         />
                     </label>
                     <label className="block">
+                        <span className="text-gray-700">Shipment Date:</span>
+                        <input
+                            type="date"
+                            name="shipmentDate"
+                            value={formatDate(shipment?.shipmentDate)}
+                            onChange={onChange}
+                            placeholder="Enter shipment date"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
+                        />
+                    </label>
+                    <label className="block">
+                        <span className="text-gray-700">Should Be Delivered Before:</span>
+                        <input
+                            type="date"
+                            name="shouldBeDeliveredBefore"
+                            value={formatDate(shipment?.shouldBeDeliveredBefore)}
+                            onChange={onChange}
+                            placeholder="Enter delivery deadline"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
+                        />
+                    </label>
+                    <label className="block">
                         <span className="text-gray-700">Load (kg):</span>
                         <input
                             type="number"
@@ -69,6 +102,17 @@ const ShipmentEditCreateModal: React.FC<ShipmentFormModalProps> = ({ shipment, i
                             value={shipment?.load || ''}
                             onChange={onChange}
                             placeholder="Enter load in kg"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
+                        />
+                    </label>
+                    <label className="block">
+                        <span className="text-gray-700">Value:</span>
+                        <input
+                            type="number"
+                            name="value"
+                            value={shipment?.value || ''}
+                            onChange={onChange}
+                            placeholder="Enter value of shipment"
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                         />
                     </label>
@@ -91,39 +135,6 @@ const ShipmentEditCreateModal: React.FC<ShipmentFormModalProps> = ({ shipment, i
                             value={shipment?.destination || ''}
                             onChange={onChange}
                             placeholder="Enter destination"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
-                        />
-                    </label>
-                    <label className="block">
-                        <span className="text-gray-700">Value:</span>
-                        <input
-                            type="number"
-                            name="value"
-                            value={shipment?.value || ''}
-                            onChange={onChange}
-                            placeholder="Enter value of shipment"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
-                        />
-                    </label>
-                    <label className="block">
-                        <span className="text-gray-700">Shipment Date:</span>
-                        <input
-                            type="date"
-                            name="shipmentDate"
-                            value={formatDate(shipment?.shipmentDate)}
-                            onChange={onChange}
-                            placeholder="Enter shipment date"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
-                        />
-                    </label>
-                    <label className="block">
-                        <span className="text-gray-700">Should Be Delivered Before:</span>
-                        <input
-                            type="date"
-                            name="shouldBeDeliveredBefore"
-                            value={formatDate(shipment?.shouldBeDeliveredBefore)}
-                            onChange={onChange}
-                            placeholder="Enter delivery deadline"
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                         />
                     </label>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { TripsType } from "../types/types";
 import { ConfirmationModal, SuccessModal, TripEditCreateModal } from "../components";
+import { v4 as uuidv4 } from "uuid";
 
 type TripsComponentProps = {
     trips: TripsType[];
@@ -11,7 +12,7 @@ const Trips: React.FC<TripsComponentProps> = () => {
     const [trips, setTrips] = useState<TripsType[]>([]);
     const [editTrip, setEditTrip] = useState<TripsType | null>(null);
     const [newTrip, setNewTrip] = useState<TripsType>({
-        id: 0,
+        tripId: uuidv4(),
         route_from: '',
         route_to: '',
         drivers: ['', ''],
@@ -87,7 +88,7 @@ const Trips: React.FC<TripsComponentProps> = () => {
                 });
             }
         }
-    }
+    };
 
     const handleEditClick = (trip: TripsType) => {
         setEditTrip(trip);
@@ -111,7 +112,7 @@ const Trips: React.FC<TripsComponentProps> = () => {
 
             // Clear the newTrip state
             setNewTrip({
-                id: 0,
+                tripId: uuidv4(),
                 route_from: '',
                 route_to: '',
                 drivers: ['', ''],
@@ -206,9 +207,12 @@ const Trips: React.FC<TripsComponentProps> = () => {
                     className="p-4 bg-white shadow rounded flex justify-between items-center"
                 >
                     <div>
-                        <span className="block text-lg font-semibold">{trip.id} - From: {trip.route_from} - To: {trip.route_to}</span>
-                        <span className="block text-sm text-gray-500">Drivers: {trip.drivers}</span>
-                        <span className="block text-sm text-gray-500">Shipments: {trip.shipments}</span>
+
+                        <span className="block text-lg font-semibold">Trip ID: {trip.tripId}</span>
+                        <span className="block text-sm text-gray-500">First Driver: {trip.drivers[0] || 'N/A'}</span>
+                        <span className="block text-sm text-gray-500">Second Driver: {trip.drivers[1] || 'N/A'}</span>
+                        <span className="block text-sm text-gray-500">First Shipment: {trip.shipments[0] || 'N/A'}</span>
+                        <span className="block text-sm text-gray-500">Second Shipment: {trip.shipments[1] || 'N/A'}</span>
                     </div>
                     <div>
                         <button 

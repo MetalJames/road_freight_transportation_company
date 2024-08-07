@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ShipmentsType } from "../types/types";
 import { ConfirmationModal, SuccessModal, ShipmentEditCreateModal } from "../components";
+import { v4 as uuidv4 } from "uuid";
 
 type ShipmentsComponentProps = {
     shipments: ShipmentsType[];
@@ -11,7 +12,7 @@ const Shipments: React.FC<ShipmentsComponentProps> = () => {
     const [shipments, setShipments] = useState<ShipmentsType[]>([]);
     const [editShipment, setEditShipment] = useState<ShipmentsType | null>(null);
     const [newShipment, setNewShipment] = useState<ShipmentsType>({
-        shipmentId: '',
+        shipmentId: uuidv4(),
         driverName: '',
         customerName: '',
         load: 0,
@@ -99,7 +100,7 @@ const Shipments: React.FC<ShipmentsComponentProps> = () => {
 
                 // Clear the newShipment state
                 setNewShipment({
-                    shipmentId: '',
+                    shipmentId: uuidv4(),
                     driverName: '',
                     customerName: '',
                     load: 0,
@@ -198,7 +199,7 @@ const Shipments: React.FC<ShipmentsComponentProps> = () => {
                         className="p-4 bg-white shadow rounded flex justify-between items-center"
                     >
                         <div>
-                            <span className="block text-lg font-semibold">{shipment.shipmentId}</span>
+                            <span className="block text-lg font-semibold">Shipment ID: {shipment.shipmentId}</span>
                             <span className="block text-sm text-gray-500">Driver: {shipment.driverName}</span>
                             <span className="block text-sm text-gray-500">Customer: {shipment.customerName}</span>
                             <span className="block text-sm text-gray-500">Load: {shipment.load}kg</span>

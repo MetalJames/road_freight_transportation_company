@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, model } from 'mongoose';
 
 interface ITrip extends Document {
-    id: number;
+    tripId: string;
     route_from: string;
     route_to: string;
     drivers: string[];
@@ -9,7 +9,7 @@ interface ITrip extends Document {
 }
 
 const tripSchema: Schema<ITrip> = new Schema({
-    id: { type: Number, required: true },
+    tripId: { type: String, required: true },
     route_from: { type: String, required: true },
     route_to: { type: String, required: true },
     drivers: { type: [String], required: true },

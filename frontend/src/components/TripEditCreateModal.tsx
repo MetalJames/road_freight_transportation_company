@@ -11,17 +11,17 @@ type TripFormModalProps = {
 
 const TripEditCreateModal: React.FC<TripFormModalProps> = ({ trip, isCreating, onChange, onSubmit, onCancel }) => (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+        <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg max-h-screen overflow-y-auto">
             <h3 className="text-xl font-semibold mb-4">
                 {isCreating ? "Create New Trip" : "Edit Trip"}
             </h3>
             <form onSubmit={onSubmit} className="space-y-4">
                 <label className="block">
-                    <span className="text-gray-700">Id:</span>
+                    <span className="text-gray-700">Trip Id:</span>
                     <input
                         type="text"
                         name="id"
-                        value={trip?.id || ''}
+                        value={trip?.tripId || ''}
                         onChange={onChange}
                         placeholder="Enter id"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"

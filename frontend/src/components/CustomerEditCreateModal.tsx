@@ -11,7 +11,7 @@ type CustomerFormModalProps = {
 
 const CustomerEditCreateModal: React.FC<CustomerFormModalProps> = ({ customer, isCreating, onChange, onSubmit, onCancel }) => (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+        <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg max-h-screen overflow-y-auto">
             <h3 className="text-xl font-semibold mb-4">
                 {isCreating ? "Create New Customer" : "Edit Customer"}
             </h3>
@@ -28,6 +28,17 @@ const CustomerEditCreateModal: React.FC<CustomerFormModalProps> = ({ customer, i
                     />
                 </label>
                 <label className="block">
+                    <span className="text-gray-700">Surname:</span>
+                    <input
+                        type="text"
+                        name="surname"
+                        value={customer?.surname || ''}
+                        onChange={onChange}
+                        placeholder="Enter surname"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
+                    />
+                </label>
+                <label className="block">
                     <span className="text-gray-700">Address:</span>
                     <input
                         type="text"
@@ -39,17 +50,27 @@ const CustomerEditCreateModal: React.FC<CustomerFormModalProps> = ({ customer, i
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Phone:</span>
+                    <span className="text-gray-700">First Phone Number:</span>
                     <input
                         type="text"
-                        name="phone"
-                        value={customer?.phone || ''}
+                        name="phone_0"  // Updated from 'firstphone' to 'phone_0'
+                        value={customer?.phone[0] || ''}
                         onChange={onChange}
-                        placeholder="Enter phone"
+                        placeholder="Enter first phone number"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
-                
+                <label className="block">
+                    <span className="text-gray-700">Second Phone Number:</span>
+                    <input
+                        type="text"
+                        name="phone_1"  // Updated from 'secondphone' to 'phone_1'
+                        value={customer?.phone[1] || ''}
+                        onChange={onChange}
+                        placeholder="Enter second phone number"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
+                    />
+                </label>
                 <div className="flex justify-end space-x-4">
                     <button
                         type="submit"

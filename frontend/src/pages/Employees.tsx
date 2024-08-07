@@ -14,8 +14,9 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
         name: '',
         surname: '',
         seniority: 0,
-        type: '',
-        category: ''
+        type: 'Driver',
+        category: '',
+        specializedBrand: ''
     });
     const [isCreating, setIsCreating] = useState<boolean>(false);
 
@@ -37,21 +38,37 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
         fetchEmployees();
     }, []);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        const numberValue = value === '' ? '' : (name === 'seniority' 
-            ? Number(value)
-            : value);
+
+        let formattedValue: string | number = value;
+
+        // Handle special cases for specific fields
+        if (name === 'category') {
+            // Convert to uppercase and allow only 'A-D'
+            formattedValue = value.toUpperCase().replace(/[^A-D]/g, '');
+        } else if (name === 'type') {
+            // Convert to uppercase
+            formattedValue = value;
+        } else if (name === 'seniority') {
+            // Convert to number, if applicable
+            formattedValue = value === '' ? '' : Number(value);
+        }
+
+        console.log(`Name: ${name}, Value: ${formattedValue}`);
+        //const numberValue = value === '' ? '' : (name === 'seniority' ? Number(value) : value);
 
         if (isCreating) {
             setNewEmployee({
                 ...newEmployee,
-                [name]: numberValue
+                //[name]: numberValue
+                [name]: formattedValue
             });
         } else if (editEmployee) {
             setEditEmployee({
                 ...editEmployee,
-                [name]: numberValue
+                //[name]: numberValue
+                [name]: formattedValue
             });
         }
     };
@@ -68,9 +85,17 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const employeeData = {...newEmployee};
+
+        // Conditionally exclude specializedBrand for non-mechanic types
+        if (isCreating && newEmployee.type !== 'Mechanic' && 'specializedBrand' in employeeData) {
+            delete employeeData.specializedBrand;
+        }
+
         if (isCreating) {
             try {
-                const response = await axios.post("http://localhost:5000/api/employees", newEmployee);
+                const response = await axios.post("http://localhost:5000/api/employees", employeeData);
                 console.log("Employee created successfully:", response.data);
 
                 // Add the new employee to the list
@@ -81,8 +106,9 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
                     name: '',
                     surname: '',
                     seniority: 0,
-                    type: '',
-                    category: ''
+                    type: 'Driver',
+                    category: '',
+                    specializedBrand: ''
                 });
 
                 // Exit create mode
@@ -172,11 +198,17 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
                     key={employee._id} 
                     className="p-4 bg-white shadow rounded flex justify-between items-center"
                 >
-                    <div>
-                        <span className="block text-lg font-semibold">{employee.name} - {employee.surname}</span>
-                        <span className="block text-sm text-gray-500"> Seniority: {employee.seniority}</span>
-                        <span className="block text-sm text-gray-500">{employee.type} - {employee.category}</span>
-                    </div>
+                <div>
+                    <span className="block text-lg font-semibold">Employee: {employee.name} {employee.surname}</span>
+                    <span className="block text-sm text-gray-500">Seniority: {employee.seniority} years</span>
+                    <span className="block text-sm text-gray-500">Type: {employee.type}</span>
+                    <span className="block text-sm text-gray-500">Category: {employee.category}</span>
+                    {/* {employee.type === 'driver' && (
+                    )} */}
+                    {employee.type === 'Mechanic' && (
+                        <span className="block text-sm text-gray-500">Specialized Brand: {employee.specializedBrand}</span>
+                    )}
+                </div>
                     <div>
                         <button 
                             onClick={() => handleEditClick(employee)} 

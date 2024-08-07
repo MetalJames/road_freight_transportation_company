@@ -11,7 +11,7 @@ type RepirRecordFormModalProps = {
 
 const RepairRecordEditCreateModal: React.FC<RepirRecordFormModalProps> = ({ repairrecord, isCreating, onChange, onSubmit, onCancel }) => (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+        <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg max-h-screen overflow-y-auto">
             <h3 className="text-xl font-semibold mb-4">
                 {isCreating ? "Create New RepirRecord" : "Edit RepirRecord"}
             </h3>
@@ -21,7 +21,7 @@ const RepairRecordEditCreateModal: React.FC<RepirRecordFormModalProps> = ({ repa
                     <input
                         type="text"
                         name="id"
-                        value={repairrecord?.id || ''}
+                        value={repairrecord?.recordId || ''}
                         onChange={onChange}
                         placeholder="Enter ID"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
@@ -39,18 +39,18 @@ const RepairRecordEditCreateModal: React.FC<RepirRecordFormModalProps> = ({ repa
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Estimated Repair Time:</span>
+                    <span className="text-gray-700">Estimated Repair Time(Hours):</span>
                     <input
                         type="text"
                         name="estimatedRepairTime"
                         value={repairrecord?.estimatedRepairTime || ''}
                         onChange={onChange}
-                        placeholder="Enter estimatedRepairTime"
+                        placeholder="Enter Estimated Repair Time"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
                 <label className="block">
-                    <span className="text-gray-700">Truck:</span>
+                    <span className="text-gray-700">Truck Name:</span>
                     <input
                         type="text"
                         name="truck"
@@ -60,7 +60,6 @@ const RepairRecordEditCreateModal: React.FC<RepirRecordFormModalProps> = ({ repa
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
                     />
                 </label>
-                
                 <div className="flex justify-end space-x-4">
                     <button
                         type="submit"

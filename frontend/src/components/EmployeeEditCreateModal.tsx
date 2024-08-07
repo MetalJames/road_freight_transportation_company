@@ -4,14 +4,14 @@ import { EmployeeType } from '../types/types';
 type EmployeeFormModalProps = {
     employee: EmployeeType | null;
     isCreating: boolean;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onChange: (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => void;
     onSubmit: (e: FormEvent) => void;
     onCancel: () => void;
 }
 
 const EmployeeEditCreateModal: React.FC<EmployeeFormModalProps> = ({ employee, isCreating, onChange, onSubmit, onCancel }) => (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+        <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg max-h-screen overflow-y-auto">
             <h3 className="text-xl font-semibold mb-4">
                 {isCreating ? "Create New Employee" : "Edit Employee"}
             </h3>
@@ -51,17 +51,39 @@ const EmployeeEditCreateModal: React.FC<EmployeeFormModalProps> = ({ employee, i
                 </label>
                 <label className="block">
                     <span className="text-gray-700">Type:</span>
-                    <input
-                        type="text"
+                    <select
                         name="type"
                         value={employee?.type || ''}
                         onChange={onChange}
-                        placeholder="Enter type"
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
-                    />
+                    >
+                        <option value="" disabled>Select type</option>
+                        <option value="Driver">Driver</option>
+                        <option value="Mechanic">Mechanic</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </label>
+                {employee?.type === 'Mechanic' && (
+                    <label className="block mt-4">
+                        <span className="text-gray-700">Specialized Brand:</span>
+                        <select
+                            name="specializedBrand"
+                            value={employee?.specializedBrand || ''}
+                            onChange={onChange}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
+                        >
+                            <option value="" disabled>Select brand</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Peterbilt">Peterbilt</option>
+                            <option value="Freightliner">Freightliner</option>
+                            <option value="Mack">Mack</option>
+                            <option value="Volvo">Volvo</option>
+                            <option value="Generic">Generic</option>
+                        </select>
+                    </label>
+                )}
                 <label className="block">
-                    <span className="text-gray-700">Category:</span>
+                    <span className="text-gray-700">Category (A-D only):</span>
                     <input
                         type="text"
                         name="category"

@@ -6,6 +6,7 @@ interface IEmployee extends Document {
     seniority: number;
     type: string;
     category: string;
+    specializedBrand?: string;
 }
 
 const employeeSchema: Schema<IEmployee> = new Schema({
@@ -14,6 +15,7 @@ const employeeSchema: Schema<IEmployee> = new Schema({
     seniority: { type: Number, required: true },
     type: { type: String, required: true },
     category: { type: String, required: true },
+    specializedBrand: { type: String, required: false },
 }, { versionKey: false });
 
 const Employee = model<IEmployee>('Employee', employeeSchema);

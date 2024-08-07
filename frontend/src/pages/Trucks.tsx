@@ -181,9 +181,11 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
                     className="p-4 bg-white shadow rounded flex justify-between items-center"
                 >
                     <div>
-                        <span className="block text-lg font-semibold">{truck.brand}</span>
-                        <span className="block text-sm text-gray-500">{truck.load}kg - {truck.capacity}kg - {truck.year}</span>
-                        <span className="block text-sm text-gray-500">Repairs: {truck.numberOfRepairs}</span>
+                        <span className="block text-lg font-semibold">Brand: {truck.brand}</span>
+                        <span className="block text-sm text-gray-500">Current Load: {truck.load} kg</span>
+                        <span className="block text-sm text-gray-500">Max Capacity: {truck.capacity} kg</span>
+                        <span className="block text-sm text-gray-500">Year of Manufacture: {truck.year}</span>
+                        <span className="block text-sm text-gray-500">Number of Repairs: {truck.numberOfRepairs}</span>
                     </div>
                     <div>
                         <button 

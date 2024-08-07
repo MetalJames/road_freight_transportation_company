@@ -1,16 +1,16 @@
 import mongoose, { Document, Schema, model } from 'mongoose';
 
 interface IRepairRecord extends Document {
-    id: number;
+    recordId: string;
     mechanic: string;
-    estimatedRepairTime: number;
+    estimatedRepairTime: string;
     truck: string;
 }
 
 const repairRecordSchema: Schema<IRepairRecord> = new Schema({
-    id: { type: Number, required: true },
+    recordId: { type: String, required: true },
     mechanic: { type: String, required: true },
-    estimatedRepairTime: { type: Number, required: true },
+    estimatedRepairTime: { type: String, required: true },
     truck: { type: String, required: true },
 }, { collection: 'repairRecords' });
 

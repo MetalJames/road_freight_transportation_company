@@ -13,6 +13,7 @@ interface IShipment extends Document {
 }
 
 const shipmentSchema: Schema<IShipment> = new Schema({
+    shipmentId: { type: String, required: true },
     driverName: { type: String, required: true },
     customerName: { type: String, required: true },
     load: { type: Number, required: true },
