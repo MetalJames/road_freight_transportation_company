@@ -26,7 +26,8 @@ const Customers: React.FC<CustomersComponentProps> = () => {
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/customers");
+                //const response = await axios.get("http://localhost:5000/api/customers");
+                const response = await axios.get("https://road-freight-transportation-company.onrender.com/api/customers");
                 setCustomers(response.data);
             } catch (error) {
                 console.error("Error fetching customers:", error);
@@ -88,7 +89,8 @@ const Customers: React.FC<CustomersComponentProps> = () => {
         e.preventDefault();
         if (isCreating) {
             try {
-                const response = await axios.post("http://localhost:5000/api/customers", newCustomer);
+                //const response = await axios.post("http://localhost:5000/api/customers", newCustomer);
+                const response = await axios.post("https://road-freight-transportation-company.onrender.com/api/customers", newCustomer);
                 console.log("Customer created successfully:", response.data);
 
                 // Add the new customer to the list
