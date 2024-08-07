@@ -146,7 +146,8 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
     const confirmDelete = async () => {
         if (truckToDelete) {
             try {
-                const response = await axios.delete(`http://localhost:5000/api/trucks/${truckToDelete}`);
+                //const response = await axios.delete(`http://localhost:5000/api/trucks/${truckToDelete}`);
+                const response = await axios.delete(`https://road-freight-transportation-company.onrender.com/api/trucks/${truckToDelete}`);
                 if (response.status === 200) {
                     setTrucks((prevTrucks) => prevTrucks.filter((truck) => truck._id !== truckToDelete));
                     
@@ -228,5 +229,3 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
 };
 
 export default Trucks;
-
-
