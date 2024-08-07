@@ -32,7 +32,8 @@ const Shipments: React.FC<ShipmentsComponentProps> = () => {
     useEffect(() => {
         const fetchShipments = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/shipments");
+                //const response = await axios.get("http://localhost:5000/api/shipments");
+                const response = await axios.get("https://road-freight-transportation-company.onrender.com/api/shipments");
                 setShipments(response.data);
             } catch (error) {
                 console.error("Error fetching shipments:", error);
@@ -92,7 +93,8 @@ const Shipments: React.FC<ShipmentsComponentProps> = () => {
         e.preventDefault();
         if (isCreating) {
             try {
-                const response = await axios.post("http://localhost:5000/api/shipments", newShipment);
+                //const response = await axios.post("http://localhost:5000/api/shipments", newShipment);
+                const response = await axios.post("https://road-freight-transportation-company.onrender.com/api/shipments", newShipment);
                 console.log("Shipment created successfully:", response.data);
 
                 // Add the new Shipment to the list
@@ -123,7 +125,8 @@ const Shipments: React.FC<ShipmentsComponentProps> = () => {
         } else if (editShipment) {
             try {
                 const response = await axios.put(
-                    `http://localhost:5000/api/shipments/${editShipment._id}`,
+                    //`http://localhost:5000/api/shipments/${editShipment._id}`,
+                    `https://road-freight-transportation-company.onrender.com/api/shipments/${editShipment._id}`,
                     editShipment
                 );
                 console.log("Shipment updated successfully:", response.data);
@@ -161,7 +164,8 @@ const Shipments: React.FC<ShipmentsComponentProps> = () => {
     const confirmDelete = async () => {
         if (shipmentToDelete) {
             try {
-                const response = await axios.delete(`http://localhost:5000/api/shipments/${shipmentToDelete}`);
+                //const response = await axios.delete(`http://localhost:5000/api/shipments/${shipmentToDelete}`);
+                const response = await axios.delete(`https://road-freight-transportation-company.onrender.com/api/shipments/${shipmentToDelete}`);
                 if (response.status === 200) {
                     setShipments((prevShipments) => prevShipments.filter((shipment) => shipment._id !== shipmentToDelete));
                     

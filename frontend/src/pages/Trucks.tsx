@@ -27,7 +27,8 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
     useEffect(() => {
         const fetchTrucks = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/trucks");
+                //const response = await axios.get("http://localhost:5000/api/trucks");
+                const response = await axios.get("https://road-freight-transportation-company.onrender.com/api/trucks");
                 setTrucks(response.data);
             } catch (error) {
                 console.error("Error fetching trucks:", error);
@@ -70,8 +71,9 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
         e.preventDefault();
         if (isCreating) {
             try {
-                const response = await axios.post("http://localhost:5000/api/trucks", newTruck);
-                console.log("Truck created successfully:", response.data);
+                //const response = await axios.post("http://localhost:5000/api/trucks", newTruck);
+                const response = await axios.post("https://road-freight-transportation-company.onrender.com/api/trucks", newTruck);
+                //console.log("Truck created successfully:", response.data);
 
                 // Add the new truck to the list
                 setTrucks([...trucks, response.data]);
@@ -96,19 +98,20 @@ const Trucks: React.FC<TrucksComponentProps> = () => {
             }
         } else if (editTruck) {
             try {
-                // const response = await axios.put(
-                //     `http://localhost:5000/api/trucks/${editTruck._id}`,
-                //     editTruck
-                // );
-
-            const url = `http://localhost:5000/api/trucks/${editTruck._id}`;
-            console.log("Updating truck at URL:", url);
-            console.log("Payload:", editTruck);
-
-            const response = await axios.put(url, editTruck);
-            console.log("Truck updated successfully:", response.data);
+                const response = await axios.put(
+                    //`http://localhost:5000/api/trucks/${editTruck._id}`,
+                    `https://road-freight-transportation-company.onrender.com/api/trucks/${editTruck._id}`,
+                    editTruck
+                );
                 console.log("Truck updated successfully:", response.data);
-                console.log(response)
+
+            // const url = `http://localhost:5000/api/trucks/${editTruck._id}`;
+            // console.log("Updating truck at URL:", url);
+            // console.log("Payload:", editTruck);
+
+            //const response = await axios.put(url, editTruck);
+            //     console.log("Truck updated successfully:", response.data);
+            //     console.log(response)
 
                 // Update the truckList state without refreshing the page
                 setTrucks((prevTrucks) =>

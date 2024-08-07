@@ -27,7 +27,8 @@ const RepairRecords: React.FC<RepairRecordsComponentProps> = () => {
     useEffect(() => {
         const fetchRepairRecords = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/repairrecords");
+                //const response = await axios.get("http://localhost:5000/api/repairrecords");
+                const response = await axios.get("https://road-freight-transportation-company.onrender.com/api/repairrecords");
                 setRepairRecords(response.data);
             } catch (error) {
                 console.error("Error fetching repair records:", error);
@@ -70,7 +71,8 @@ const RepairRecords: React.FC<RepairRecordsComponentProps> = () => {
         e.preventDefault();
         if (isCreating) {
             try {
-                const response = await axios.post("http://localhost:5000/api/repairrecords", newRepairRecord);
+                //const response = await axios.post("http://localhost:5000/api/repairrecords", newRepairRecord);
+                const response = await axios.post("https://road-freight-transportation-company.onrender.com/api/repairrecords", newRepairRecord);
                 console.log("Repair Record created successfully:", response.data);
 
                 // Add the new RepairRecord to the list
@@ -96,7 +98,8 @@ const RepairRecords: React.FC<RepairRecordsComponentProps> = () => {
         } else if (editRepairRecord) {
             try {
                 const response = await axios.put(
-                    `http://localhost:5000/api/repairrecords/${editRepairRecord._id}`,
+                    //`http://localhost:5000/api/repairrecords/${editRepairRecord._id}`,
+                    `https://road-freight-transportation-company.onrender.com/api/repairrecords/${editRepairRecord._id}`,
                     editRepairRecord
                 );
                 console.log("Repair Record updated successfully:", response.data);
@@ -134,7 +137,8 @@ const RepairRecords: React.FC<RepairRecordsComponentProps> = () => {
     const confirmDelete = async () => {
         if (repairrecordToDelete) {
             try {
-                const response = await axios.delete(`http://localhost:5000/api/repairrecords/${repairrecordToDelete}`);
+                //const response = await axios.delete(`http://localhost:5000/api/repairrecords/${repairrecordToDelete}`);
+                const response = await axios.delete(`https://road-freight-transportation-company.onrender.com/api/repairrecords/${repairrecordToDelete}`);
                 if (response.status === 200) {
                     setRepairRecords((prevRepairRecords) => prevRepairRecords.filter((repairrecord) => repairrecord._id !== repairrecordToDelete));
                     

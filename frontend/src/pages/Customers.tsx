@@ -116,7 +116,8 @@ const Customers: React.FC<CustomersComponentProps> = () => {
         } else if (editCustomer) {
             try {
                 const response = await axios.put(
-                    `http://localhost:5000/api/customers/${editCustomer._id}`,
+                    // `http://localhost:5000/api/customers/${editCustomer._id}`,
+                    `https://road-freight-transportation-company.onrender.com/api/customers/${editCustomer._id}`,
                     editCustomer
                 );
                 console.log("Customer updated successfully:", response.data);
@@ -154,7 +155,8 @@ const Customers: React.FC<CustomersComponentProps> = () => {
     const confirmDelete = async () => {
         if (customerToDelete) {
             try {
-                const response = await axios.delete(`http://localhost:5000/api/customers/${customerToDelete}`);
+                //const response = await axios.delete(`http://localhost:5000/api/customers/${customerToDelete}`);
+                const response = await axios.delete(`https://road-freight-transportation-company.onrender.com/api/customers/${customerToDelete}`);
                 if (response.status === 200) {
                     setCustomers((prevCustomers) => prevCustomers.filter((customer) => customer._id !== customerToDelete));
                     

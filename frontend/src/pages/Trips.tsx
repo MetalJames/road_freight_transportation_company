@@ -28,7 +28,8 @@ const Trips: React.FC<TripsComponentProps> = () => {
     useEffect(() => {
         const fetchTrips = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/trips");
+                //const response = await axios.get("http://localhost:5000/api/trips");
+                const response = await axios.get("https://road-freight-transportation-company.onrender.com/api/trips");
                 setTrips(response.data);
             } catch (error) {
                 console.error("Error fetching trips:", error);
@@ -104,7 +105,8 @@ const Trips: React.FC<TripsComponentProps> = () => {
     e.preventDefault();
     if (isCreating) {
         try {
-            const response = await axios.post("http://localhost:5000/api/trips", newTrip);
+            //const response = await axios.post("http://localhost:5000/api/trips", newTrip);
+            const response = await axios.post("https://road-freight-transportation-company.onrender.com/api/trips", newTrip);
             console.log("Trip created successfully:", response.data);
 
             // Add the new trip to the list
@@ -131,7 +133,8 @@ const Trips: React.FC<TripsComponentProps> = () => {
     } else if (editTrip) {
         try {
             const response = await axios.put(
-                `http://localhost:5000/api/trips/${editTrip._id}`,
+                //`http://localhost:5000/api/trips/${editTrip._id}`,
+                `https://road-freight-transportation-company.onrender.com/api/trips/${editTrip._id}`,
                 editTrip
             );
             console.log("Trip updated successfully:", response.data);
@@ -169,7 +172,8 @@ const Trips: React.FC<TripsComponentProps> = () => {
     const confirmDelete = async () => {
         if (tripToDelete) {
             try {
-                const response = await axios.delete(`http://localhost:5000/api/trips/${tripToDelete}`);
+                //const response = await axios.delete(`http://localhost:5000/api/trips/${tripToDelete}`);
+                const response = await axios.delete(`https://road-freight-transportation-company.onrender.com/api/trips/${tripToDelete}`);
                 if (response.status === 200) {
                     setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
                     

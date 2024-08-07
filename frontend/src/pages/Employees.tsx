@@ -28,7 +28,8 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/employees");
+                //const response = await axios.get("http://localhost:5000/api/employees");
+                const response = await axios.get("https://road-freight-transportation-company.onrender.com/api/employees");
                 setEmployees(response.data);
             } catch (error) {
                 console.error("Error fetching employees:", error);
@@ -95,7 +96,8 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
 
         if (isCreating) {
             try {
-                const response = await axios.post("http://localhost:5000/api/employees", employeeData);
+                //const response = await axios.post("http://localhost:5000/api/employees", employeeData);
+                const response = await axios.post("https://road-freight-transportation-company.onrender.com/api/employees", employeeData);
                 console.log("Employee created successfully:", response.data);
 
                 // Add the new employee to the list
@@ -123,7 +125,8 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
         } else if (editEmployee) {
             try {
                 const response = await axios.put(
-                    `http://localhost:5000/api/employees/${editEmployee._id}`,
+                    //`http://localhost:5000/api/employees/${editEmployee._id}`,
+                    `https://road-freight-transportation-company.onrender.com/api/employees/${editEmployee._id}`,
                     editEmployee
                 );
                 console.log("Employee updated successfully:", response.data);
@@ -161,7 +164,8 @@ const Employees: React.FC<EmployeesComponentProps> = () => {
     const confirmDelete = async () => {
         if (employeeToDelete) {
             try {
-                const response = await axios.delete(`http://localhost:5000/api/employees/${employeeToDelete}`);
+                //const response = await axios.delete(`http://localhost:5000/api/employees/${employeeToDelete}`);
+                const response = await axios.delete(`https://road-freight-transportation-company.onrender.com/api/employees/${employeeToDelete}`);
                 if (response.status === 200) {
                     setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee._id !== employeeToDelete));
                     
