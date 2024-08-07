@@ -12,7 +12,7 @@ const repairRecordSchema: Schema<IRepairRecord> = new Schema({
     mechanic: { type: String, required: true },
     estimatedRepairTime: { type: String, required: true },
     truck: { type: String, required: true },
-}, { versionKey: false });
+}, { collection: 'repairRecords' }, );
 
 const RepairRecord = model<IRepairRecord>('RepairRecord', repairRecordSchema);
 
