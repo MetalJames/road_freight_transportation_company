@@ -15,7 +15,8 @@ const App: React.FC = () => {
 
   //using memo hook so I will not have an issue with refreshing - memorizing our data
   const axiosInstance = useMemo(() => axios.create({
-    baseURL: "http://localhost:5000/api", // Adjust as per your backend server setup
+    //baseURL: "http://localhost:5000/api",
+    baseURL: "https://road-freight-transportation-company.onrender.com/api",
   }), []);
 
   useEffect(() => {
