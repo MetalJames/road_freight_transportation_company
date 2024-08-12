@@ -39,6 +39,13 @@ app.use('/api/shipments', ShipmentRoutes);
 import { TripRoutes } from './routes/trips';
 app.use('/api/trips', TripRoutes);
 
+// Cron job route
+app.get('/cron-job', (req: Request, res: Response) => {
+    // Perform cron job tasks
+    // Return minimal output
+    res.send('OK'); // Or any minimal status message
+});
+
 if (process.env.NODE_ENV !== 'test') {
     app.listen(port, () => {
         console.log(`Server running on port ${port}`);
